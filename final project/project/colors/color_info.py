@@ -2,11 +2,7 @@
 This file is for any color recognition related code
 """
 
-class colors:
-
-    
-
-    colors = {
+colors_dictionary = {
     "black": {"mean": [0, 0, 0]},
     "white": {"mean": [300, 300, 200]},
     "red": {"mean": [250, 30, 30]},
@@ -27,7 +23,10 @@ class colors:
     #"red_white_boundary": {"mean": [255,100,75]},
     #"blue_white_boundary": {"mean": [280,255,160]},
     "pink": {"mean": [255, 192, 203]},
-}
+    }
+
+def get_cd() -> dict: 
+    return colors_dictionary
 
 mapred = ["map_red", "map_red_plus_tape", "red"]
 mapblue = ["map_blue", "map_blue_plus_tape", "blue"]
