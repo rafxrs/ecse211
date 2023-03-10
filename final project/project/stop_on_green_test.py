@@ -1,6 +1,9 @@
-from utils.brick import BP, TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors, reset_brick
-import time, math
+from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
+from utils.emergency_stop import ES
 from collections import deque
+from colors import color_info, get_color, rbg
+import time, math
+
 
 leftmotor = Motor("D")
 rightmotor = Motor("A")
@@ -9,58 +12,23 @@ red_color_sensor = EV3ColorSensor(2)
 sensor = TouchSensor(1)
 sleepsensor = TouchSensor(4)
 
-
 wait_ready_sensors(True)
 print("Done waiting.")
 
-def emergency_stop():
-    #if this function is called that means touch sensor 3 was pressed
-    #we stop everything, reset the brick pi and print the emergency stop message, and exit the program
-        print('Emergency stop triggered')
-        BP.reset_all()
-        exit()
-
-colors = {
-    "black": {"mean": [0, 0, 0]},
-    "white": {"mean": [300, 300, 200]},
-    "red": {"mean": [250, 30, 30]},
-    "green": {"mean": [20, 100, 30]},
-    "blue": {"mean": [20, 30, 45]},
-    "yellow": {"mean": [300, 200, 20]},
-    "orange": {"mean": [240, 70, 50]},
-    #"orange_zone": {"mean": [240, 70, 50],
-    "purple": {"mean": [70, 50, 70]},
-    "map_white": {"mean": [300, 260, 170]},
-    "map_tape": {"mean": [190, 170, 100]},
-    "map_blue": {"mean": [37,60,60]},
-    "map_blue_plus_tape": {"mean": [45,50,52]},
-    "map_red": {"mean": [245,38,18]},
-    "map_red_plus_tape": {"mean": [250,50,30]},
-    "map_green": {"mean": [37,100,20]},
-    "map_green_plus_tape": {"mean": [50,120,30]},
-    #"red_white_boundary": {"mean": [255,100,75]},
-    #"blue_white_boundary": {"mean": [280,255,160]},
-    "pink": {"mean": [255, 192, 203]},
-}
+colors_dict = color_info.get_cd()
 
 mapred = ["map_red", "map_red_plus_tape", "red"]
 mapblue = ["map_blue", "map_blue_plus_tape", "blue"]
 mapgreen = ["map_green", "map_green_plus_tape", "green"]
 mapwhite = ["map_white", "white", "map_tape"]
+delivery_zones = ["red_zone", "orange_zone", "green_zone", "blue_zone", "purple_zone"]
+delivery_cubes = ["red", "orange", "yellow", "green", "blue", "purple"]
 
 
 # Define the threshold for color distance
 color_threshold = 50
 
-# Define the function to normalize RGB values
-def normalize_rgb(r, g, b):
-    denominator = math.sqrt(r**2+g**2+b**2)
-    if denominator == 0:
-        return 0,0,0
-    normalized_r = r / math.sqrt(r**2 + g**2 + b**2)
-    normalized_g = g / math.sqrt(r**2 + g**2 + b**2)
-    normalized_b = b / math.sqrt(r**2 + g**2 + b**2)
-    return normalized_r, normalized_g, normalized_b
+
 
 # Define the function to calculate the distance between two colors
 def color_distance(color1, color2):
@@ -199,7 +167,7 @@ try:
     while not sensor.is_pressed():
         follow_path()
         #print(color_sensor.get_rgb())
-    emergency_stop()
+    ES.emergency_stop()
 except BaseException as error:
     print(error)
     exit()
