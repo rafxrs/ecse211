@@ -1,7 +1,7 @@
 from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
 from utils.emergency_stop import ES
 from collections import deque
-from colors import color_info, get_color, rbg
+from colors import color_info, get_color, rgb
 import time, math
 
 
@@ -34,8 +34,8 @@ color_threshold = 50
 def color_distance(color1, color2):
     r1, g1, b1 = color1
     r2, g2, b2 = color2
-    normalized_r1, normalized_g1, normalized_b1 = normalize_rgb(r1, g1, b1)
-    normalized_r2, normalized_g2, normalized_b2 = normalize_rgb(r2, g2, b2)
+    normalized_r1, normalized_g1, normalized_b1 = rgb.normalize_rgb(r1, g1, b1)
+    normalized_r2, normalized_g2, normalized_b2 = rgb.normalize_rgb(r2, g2, b2)
     distance = math.sqrt((normalized_r1 - normalized_r2)**2 +
                          (normalized_g1 - normalized_g2)**2 +
                          (normalized_b1 - normalized_b2)**2)
@@ -45,7 +45,7 @@ def color_distance(color1, color2):
 def closest_color(rgb_values):
     min_distance = float('inf')
     closest_color = None
-    for color_name, color_values in colors.items():
+    for color_name, color_values in colors_dict.items():
         distance = color_distance(rgb_values, color_values["mean"])
         if distance < min_distance:
             min_distance = distance
