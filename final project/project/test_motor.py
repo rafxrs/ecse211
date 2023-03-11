@@ -1,14 +1,14 @@
-from utils.brick import BP, TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors, reset_brick
+from utils.brick import BP, TouchSensor, Motor, wait_ready_sensors, reset_brick
 import time, math
 
-sleepsensor = TouchSensor(4)
-sensor = TouchSensor(1)
-pistonmotor = Motor("C")
+actionsensor = TouchSensor(4)
+stopsensor = TouchSensor(1)
+motor = Motor("B")
 
 #This is a testing file to test a single motor
 
-POWER_LIMIT = 20       # Power limit = 
-SPEED_LIMIT = 360      # Speed limit = 720 deg per sec (dps)
+POWER_LIMIT = 20       # Power limit (percentage)
+SPEED_LIMIT = 360      # Speed limit in degree per second
 
 wait_ready_sensors(True)
 print("Done waiting.")
@@ -20,19 +20,19 @@ def emergency_stop():
         BP.reset_all()
         exit()
 
-time.sleep(4)
+time.sleep(2)
 try:
     # Encoder keeps a record of degrees turned
-    pistonmotor.reset_encoder()                      # Reset encoder to 0 value
-    pistonmotor.set_limits(POWER_LIMIT, SPEED_LIMIT) # Set the power and speed limits
-    pistonmotor.set_power(0)
+    motor.reset_encoder()                      # Reset encoder to 0 value
+    motor.set_limits(POWER_LIMIT, SPEED_LIMIT) # Set the power and speed limits
+    motor.set_power(0)
 
-    while not sensor.is_pressed():
-        if sleepsensor.is_pressed():
-            print("sleep")
-            time.sleep(3)
-        print("Motor Position Control Test")
-        pistonmotor.set_position(360) 
+    while not stopsensor.is_pressed():
+        if actionsensor.is_pressed():
+            motor.set_position_relative(90)
+            time.sleep(2)
+            motor.set_position_relative(-90)
+
     emergency_stop()
 except BaseException as error:
     print(error)

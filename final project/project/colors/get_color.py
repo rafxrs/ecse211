@@ -1,5 +1,5 @@
-import color_info
-import time, math
+from colors import color_info
+import math
 from collections import deque
 
 colors_dict = color_info.get_cd()

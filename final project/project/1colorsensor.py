@@ -1,4 +1,4 @@
-from utils.brick import BP, TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
+from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
 from utils.emergency_stop import ES
 import time
 from colors import get_color
