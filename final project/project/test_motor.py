@@ -27,6 +27,7 @@ try:
     motor.set_limits(POWER_LIMIT, SPEED_LIMIT) # Set the power and speed limits
     motor.set_power(0)
 
+    #Test the crane by going down 90 degrees and then up 90 degrees
     while not stopsensor.is_pressed():
         if actionsensor.is_pressed():
             motor.set_position_relative(90)

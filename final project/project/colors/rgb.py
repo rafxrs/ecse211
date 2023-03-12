@@ -17,13 +17,4 @@ def get_rgb():
         print(error)
         exit()
     
-# Define the function to normalize RGB values
-def normalize_rgb(r, g, b):
-    denominator = math.sqrt(r**2+g**2+b**2)
-    if denominator == 0:
-        return 0,0,0
-    normalized_r = r / math.sqrt(r**2 + g**2 + b**2)
-    normalized_g = g / math.sqrt(r**2 + g**2 + b**2)
-    normalized_b = b / math.sqrt(r**2 + g**2 + b**2)
-    return normalized_r, normalized_g, normalized_b
     
