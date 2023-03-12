@@ -1,5 +1,5 @@
 """
-This file is for any color recognition related code
+This file is for any color data related code
 """
 
 colors_dictionary = {

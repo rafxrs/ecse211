@@ -1,9 +1,20 @@
+"""
+This script implements the crucial function get_mean_color()
+We poll the color sensor continuously, and normalize the rgb values. Then, we check the distance
+to the closest color cluster to determine what color we are seeing.
+For more precision, we take the last 10 polls and the color that appears the most in those 10 polls is the 
+color we are currently seeing
+"""
+
+
 from colors import color_info
 import math
 from collections import deque
 
+# Color dictionary
 colors_dict = color_info.get_cd()
 
+# Names of the colors
 mapred = ["map_red", "map_red_plus_tape", "red"]
 mapblue = ["map_blue", "map_blue_plus_tape", "blue"]
 mapgreen = ["map_green", "map_green_plus_tape", "green"]
@@ -48,7 +59,10 @@ def closest_color(rgb_values):
     else:
         return None
 
+# Queue to take the last 10 polls and then take the most common color 
 color_polls = deque(maxlen=10)
+
+# Function that returns the color that appears the most in the last ten polls
 def mean_color(color_name):
     
     color_polls.append(color_name)
@@ -65,13 +79,17 @@ def mean_color(color_name):
     else:
         return "unknown"
 
-last_30 = deque(maxlen=30)
+# Queue that takes the last 20 mean values
+last_20 = deque(maxlen=20)
+
+# Function that returns the mean color of the last 10 mean colors
+# That is to say, this function takes 300 polls as input
 def get_last_30(mean):
-    last_30.append(mean)
+    last_20.append(mean)
     #print(len(color_polls))
-    if len(last_30) == 30:
+    if len(last_20) == 30:
         last_counts= {}
-        for color in last_30:
+        for color in last_20:
             if color in last_counts:
                 last_counts[color]+=1
             else:
@@ -81,6 +99,8 @@ def get_last_30(mean):
     else:
         return "unknown"
 
+# The MOST important funtion: continuously polls the color sensor, and takes the mean of every 10 polls
+# This function has shown through testing to be very precise
 def get_mean_color(color_sensor):
     color = closest_color(tuple(color_sensor.get_rgb()))
     #print(color)
