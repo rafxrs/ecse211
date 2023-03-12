@@ -1,6 +1,8 @@
 from utils.brick import BP, TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors, reset_brick
 import time, math
 from collections import deque
+from colors import get_color
+from utils.emergency_stop import ES
 
 leftmotor = Motor("A")
 rightmotor = Motor("D")

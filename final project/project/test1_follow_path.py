@@ -1,3 +1,13 @@
+""" 
+Very first version of the software that analyzes the color sensor values, takes the mean of the 10 last polls
+and drives accordingly 
+This code works and follows the path perfectly fine
+We changed it to a more recent version, test2_follow_path.py 
+"""
+
+
+
+
 from utils.brick import BP, TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors, reset_brick
 import time, math
 from collections import deque
