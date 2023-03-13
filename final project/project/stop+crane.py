@@ -8,8 +8,8 @@ import time, math
 leftmotor = Motor("D")
 rightmotor = Motor("A")
 cranemotor = Motor("B")
-static_color_sensor = EV3ColorSensor(2)
-mobile_color_sensor = EV3ColorSensor(3)
+static_color_sensor = EV3ColorSensor(3)
+mobile_color_sensor = EV3ColorSensor(2)
 sensor = TouchSensor(1)
 actionsensor = TouchSensor(4)
 
@@ -175,19 +175,19 @@ def follow_path():
             rightmotor.set_power(0)
             #adjust_robot()
             
-            cranemotor.set_position_relative(90)
+            #cranemotor.set_position_relative(90)
             for i in range (5):
                 print(mobile_color_sensor.get_rgb())
                 time.sleep(1)
-            cranemotor.set_position_relative(-90)
+            #cranemotor.set_position_relative(-90)
             
             print("color: "+ last)
             delivery_colors.append(last)
 
             while path in mapgreen:
                 path = get_static_sensor()
-                leftmotor.set_power(10)
-                rightmotor.set_power(10)
+                leftmotor.set_power(18)
+                rightmotor.set_power(18)
         else:
             leftmotor.set_power(18)
             rightmotor.set_power(18)
