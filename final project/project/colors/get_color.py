@@ -84,10 +84,10 @@ last_20 = deque(maxlen=20)
 
 # Function that returns the mean color of the last 10 mean colors
 # That is to say, this function takes 300 polls as input
-def get_last_30(mean):
+def get_last_20(mean):
     last_20.append(mean)
     #print(len(color_polls))
-    if len(last_20) == 30:
+    if len(last_20) == 20:
         last_counts= {}
         for color in last_20:
             if color in last_counts:
