@@ -1,3 +1,10 @@
+""""
+DO NOT use this code yet, it DOES NOT WORK
+
+The goal of this code was to use two color sensors to read the path, but we didn't go through with this idea
+We likely will not need to use this code ever again, but we are keeping the file
+"""
+
 from utils.brick import BP, TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors, reset_brick
 import time, math
 from collections import deque
