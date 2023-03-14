@@ -8,8 +8,8 @@ import time, math
 leftmotor = Motor("D")
 rightmotor = Motor("A")
 cranemotor = Motor("B")
-static_color_sensor = EV3ColorSensor(3)
-mobile_color_sensor = EV3ColorSensor(2)
+static_color_sensor = EV3ColorSensor(2)
+mobile_color_sensor = EV3ColorSensor(3)
 sensor = TouchSensor(1)
 actionsensor = TouchSensor(4)
 
@@ -137,7 +137,7 @@ def adjust_robot():
     """
     Function that puts the robot exactly on the green line when we see green 
     """
-    
+
 
 
 delivery_colors= []
