@@ -15,7 +15,7 @@ from colors import get_color
 
 leftmotor = Motor("D")
 rightmotor = Motor("A")
-color_sensor = EV3ColorSensor(2)
+color_sensor = EV3ColorSensor(3)
 sensor = TouchSensor(1)
 
 mapred = ["map_red", "map_red_plus_tape", "red"]

@@ -10,7 +10,6 @@ rightmotor = Motor("A")
 blue_color_sensor = EV3ColorSensor(3)
 red_color_sensor = EV3ColorSensor(2)
 sensor = TouchSensor(1)
-sleepsensor = TouchSensor(4)
 
 wait_ready_sensors(True)
 print("Done waiting.")
