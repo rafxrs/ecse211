@@ -66,6 +66,7 @@ def follow_path():
             leftmotor.set_power(0)
             rightmotor.set_power(0)
             turn("right")
+            ES.emergency_stop()
     
     except BaseException as error:
         print(error)
