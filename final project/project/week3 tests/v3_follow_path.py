@@ -76,7 +76,7 @@ def follow_path():
 time.sleep(4)
 try:
     while not sensor.is_pressed():
-        follow_path()
+        turn("right")
     ES.emergency_stop()
 except BaseException as error:
     print(error)
