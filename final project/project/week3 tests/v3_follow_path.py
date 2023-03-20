@@ -34,11 +34,14 @@ print("Done waiting.")
 
 def turn(direction):
     if direction == "right":
-        leftmotor.set_position_relative(-90)
-        rightmotor.set_position_relative(90)
+        leftmotor.set_position_relative(360)
+        rightmotor.set_position_relative(-180)
     elif direction == "left":
-        leftmotor.set_position_relative(8)
-        rightmotor.set_position_relative(35)
+        leftmotor.set_position_relative(-180)
+        rightmotor.set_position_relative(360)
+    else:
+        pass
+    time.sleep(1)
 
 #def read():
 
