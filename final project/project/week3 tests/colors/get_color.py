@@ -78,6 +78,67 @@ def mean_color(color_name):
         return mode_color
     else:
         return "unknown"
+    
+# Queue to take the last 10 polls and then take the most common color 
+front_color_polls = deque(maxlen=10)
+    
+# Function that returns the color that appears the most in the last ten polls
+def mean_front_color(color_name):
+    
+    front_color_polls.append(color_name)
+    #print(len(color_polls))
+    if len(front_color_polls) == 10:
+        front_color_counts= {}
+        for color in front_color_polls:
+            if color in front_color_counts:
+                front_color_counts[color]+=1
+            else:
+                front_color_counts[color]=1
+        mode_color = max(front_color_counts, key=front_color_counts.get)
+        return mode_color
+    else:
+        return "unknown"
+    
+# Queue to take the last 10 polls and then take the most common color 
+back_color_polls = deque(maxlen=10)
+    
+# Function that returns the color that appears the most in the last ten polls
+def mean_back_color(color_name):
+    
+    back_color_polls.append(color_name)
+    #print(len(color_polls))
+    if len(back_color_polls) == 10:
+        back_color_counts= {}
+        for color in back_color_polls:
+            if color in back_color_counts:
+                back_color_counts[color]+=1
+            else:
+                back_color_counts[color]=1
+        mode_color = max(back_color_counts, key=back_color_counts.get)
+        return mode_color
+    else:
+        return "unknown"
+    
+zone_color_polls = deque(maxlen=10)
+
+def zone_mean_color(color_name):
+    
+    zone_color_polls.append(color_name)
+    #print(len(color_polls))
+    if len(zone_color_polls) == 10:
+        zone_color_counts= {}
+        for color in zone_color_polls:
+            if color in zone_color_counts:
+                zone_color_counts[color]+=1
+            else:
+                zone_color_counts[color]=1
+        mode_color = max(zone_color_counts, key=zone_color_counts.get)
+        if mode_color in mapred: return "red"
+        elif mode_color in mapblue: return "blue"
+        elif mode_color in mapgreen: return "green"
+        return mode_color
+    else:
+        return "unknown"
 
 # Queue that takes the last 20 mean values
 last_20 = deque(maxlen=20)
@@ -105,5 +166,26 @@ def get_mean_color(color_sensor):
     color = closest_color(tuple(color_sensor.get_rgb()))
     #print(color)
     mean = mean_color(color)
+    print("mean: "+mean)
+    return mean
+
+def get_mean_front_color(front_color_sensor):
+    color = closest_color(tuple(front_color_sensor.get_rgb()))
+    #print(color)
+    mean = mean_front_color(color)
+    print("mean: "+mean)
+    return mean
+
+def get_mean_back_color(back_color_sensor):
+    color = closest_color(tuple(back_color_sensor.get_rgb()))
+    #print(color)
+    mean = mean_back_color(color)
+    print("mean: "+mean)
+    return mean
+
+def get_mean_zone_color(zone_color_sensor):
+    color = closest_color(tuple(zone_color_sensor.get_rgb()))
+    #print(color)
+    mean = mean_back_color(color)
     print("mean: "+mean)
     return mean
