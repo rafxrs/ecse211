@@ -99,6 +99,25 @@ def mean_front_color(color_name):
     else:
         return "unknown"
     
+# Queue to take the last 10 polls and then take the most common color 
+back_color_polls = deque(maxlen=10)
+    
+# Function that returns the color that appears the most in the last ten polls
+def mean_back_color(color_name):
+    
+    back_color_polls.append(color_name)
+    #print(len(color_polls))
+    if len(back_color_polls) == 10:
+        back_color_counts= {}
+        for color in back_color_polls:
+            if color in back_color_counts:
+                back_color_counts[color]+=1
+            else:
+                back_color_counts[color]=1
+        mode_color = max(back_color_counts, key=back_color_counts.get)
+        return mode_color
+    else:
+        return "unknown"
     
 zone_color_polls = deque(maxlen=10)
 
@@ -117,7 +136,6 @@ def zone_mean_color(color_name):
         if mode_color in mapred: return "red"
         elif mode_color in mapblue: return "blue"
         elif mode_color in mapgreen: return "green"
-        elif mode_color in mapwhite: return "white"
         return mode_color
     else:
         return "unknown"
@@ -141,51 +159,6 @@ def get_last_20(mean):
         return last_color
     else:
         return "unknown"
-    
-# Queue that takes the last 20 mean values
-last_10 = deque(maxlen=10)
-
-# Function that returns the mean color of the last 10 mean colors
-# That is to say, this function takes 300 polls as input
-def get_last_10(mean):
-    last_10.append(mean)
-    #print(len(color_polls))
-    if len(last_10) == 10:
-        last_counts= {}
-        for color in last_10:
-            if color in last_counts:
-                last_counts[color]+=1
-            else:
-                last_counts[color]=1
-        last_color = max(last_counts, key=last_counts.get)
-        return last_color
-    else:
-        return "unknown"
-    
-# Queue that takes the last 20 mean values
-last_10_blue_red = deque(maxlen=10)
-
-# Function that returns the mean color of the last 10 mean colors
-# That is to say, this function takes 300 polls as input
-def get_last_10_bk(mean):
-    if mean in mapblue:
-        last_10_blue_red.append(mean)
-    elif mean in mapred:
-        last_10_blue_red.append(mean)
-    else:
-        pass
-    #print(len(color_polls))
-    if len(last_10) == 10:
-        last_counts= {}
-        for color in last_10_blue_red:
-            if color in last_counts:
-                last_counts[color]+=1
-            else:
-                last_counts[color]=1
-        last_color = max(last_counts, key=last_counts.get)
-        return last_color
-    else:
-        return "unknown"
 
 # The MOST important funtion: continuously polls the color sensor, and takes the mean of every 10 polls
 # This function has shown through testing to be very precise
@@ -193,18 +166,26 @@ def get_mean_color(color_sensor):
     color = closest_color(tuple(color_sensor.get_rgb()))
     #print(color)
     mean = mean_color(color)
+    print("mean: "+mean)
     return mean
 
 def get_mean_front_color(front_color_sensor):
     color = closest_color(tuple(front_color_sensor.get_rgb()))
     #print(color)
     mean = mean_front_color(color)
-    # print("mean: "+mean)
+    print("mean: "+mean)
+    return mean
+
+def get_mean_back_color(back_color_sensor):
+    color = closest_color(tuple(back_color_sensor.get_rgb()))
+    #print(color)
+    mean = mean_back_color(color)
+    print("mean: "+mean)
     return mean
 
 def get_mean_zone_color(zone_color_sensor):
     color = closest_color(tuple(zone_color_sensor.get_rgb()))
     #print(color)
-    mean = zone_mean_color(color)
-    # print("mean: "+mean)
+    mean = mean_back_color(color)
+    print("mean: "+mean)
     return mean

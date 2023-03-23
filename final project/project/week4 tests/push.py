@@ -36,6 +36,7 @@ try:
     #Test the piston
     while not sensor.is_pressed():
         push()
+        time.sleep(2)
     ES.emergency_stop()
 except BaseException as error:
     print(error)
