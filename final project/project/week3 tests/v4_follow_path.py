@@ -6,8 +6,6 @@ In this version, we use two color sensors, one far ahead of the robot to follow 
 The second color sensor is static and on top of the delivery zone and its role is to detect the delivery color
 If the green line is detected, the goal is to keep driving unitl we have the wheels on the green zone (or until the second color sensor reads a delivery zone value)
 This is all done in this file
-Four different tests were performed:
--
 """
 
 from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors

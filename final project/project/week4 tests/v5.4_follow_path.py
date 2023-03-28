@@ -2,7 +2,12 @@
 CODE IN PROGRESS
 v5.4 -- 03.28
 
-Goal is to add a way to adjust the robot when we reach the green line
+Changes from v5.3:
+    - add a way to adjust the robot when we reach the green line (not done yet)
+    - make the robot continue to follow the path and THEN move conveyor belt back
+        to base position for maximum efficiency (not done yet)
+    - make the piston have more power and turn faster so we don't have to push twice (not done yet)
+    
 """
 
 from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors

@@ -3,6 +3,9 @@ Code used for demo on 23/03: works on the u turn map
 
 v5 of follow path
 
+Major changes from v4:
+    - added follow_path_carefully() to drive the robot carefully when we rach the line/approach the zone
+
 In this version, we use two color sensors, one in front of the robot to follow the path accurately
 The second color sensor is static and on top of the delivery zone and its role is to detect the delivery color
 If the green line is detected, the goal is to keep driving unitl we have the wheels on the green zone (or until the second color sensor reads a delivery zone value)
@@ -101,6 +104,7 @@ def drop(color):
     Drops the cube of color 'color'
     First, we slide to get the right position
     Then, we push
+    Then, we move back to initial position
     """
     move_to_cube_position(color)
     pushmotor.set_limits(80, 500) # Set the power and speed limits
@@ -108,6 +112,7 @@ def drop(color):
     push()
     push()
     pushmotor.set_limits(POWER_LIMIT, SPEED_LIMIT) # Set the power and speed limits
+    move_to_base(color)
     
 
 def follow_path_carefully():
@@ -185,7 +190,7 @@ def follow_path():
                 zone_color = get_color.get_mean_zone_color(zone_color_sensor)
                 path_color= get_color.get_mean_color(front_color_sensor)
                 follow_path_carefully()
-            move_to_base(delivery_color)
+            
 
 
             
