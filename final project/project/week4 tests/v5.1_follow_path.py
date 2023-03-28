@@ -1,13 +1,7 @@
 """
-Code used for demo on 23/03: works on the u turn map
+v5.1 
+Added function turn_around() to perform 180 degree turn for when we deliver the last cube
 
-v5 of follow path
-
-In this version, we use two color sensors, one in front of the robot to follow the path accurately
-The second color sensor is static and on top of the delivery zone and its role is to detect the delivery color
-If the green line is detected, the goal is to keep driving unitl we have the wheels on the green zone (or until the second color sensor reads a delivery zone value)
-This is all done in this file
-We stop the robot after all 6 cubes have been delivered
 """
 
 from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
@@ -68,6 +62,43 @@ rightmotor.reset_encoder()
 # Initialize sensors
 wait_ready_sensors(True)
 print("Done waiting.")
+
+
+
+def turn_around():
+    """
+    NEW IN v5.1
+    Function to perform a 180 turn when we finish the track
+    """
+    t = 0
+    leftmotor.set_power(15)
+    rightmotor.set_power(15)
+    while t<0.5:
+        time.sleep(0.1)
+        t+=0.1
+    t = 0
+    leftmotor.set_power(-25)
+    rightmotor.set_power(10)
+    while t<1:
+        time.sleep(0.1)
+        t+=0.1
+    t = 0
+    leftmotor.set_power(0)
+    rightmotor.set_power(30)
+    while t<1.5:
+        time.sleep(0.1)
+        t+=0.1
+    t = 0
+    leftmotor.set_power(-25)
+    rightmotor.set_power(10)
+    while t<2:
+        time.sleep(0.1)
+        t+=0.1
+    leftmotor.set_power(0)
+    rightmotor.set_power(0)
+
+    print("Done")
+    time.sleep(4)
 
 def move_to_cube_position(color_name):
     """
@@ -199,8 +230,11 @@ def follow_path():
 # Main function
 time.sleep(4)
 try:
-    while not sensor.is_pressed():
+    while not sensor.is_pressed() and len(delivery_cubes)>0:
         follow_path()
+    if sensor.is_pressed():
+        ES.emergency_stop()
+    turn_around()
     ES.emergency_stop()
 except BaseException as error:
     print(error)

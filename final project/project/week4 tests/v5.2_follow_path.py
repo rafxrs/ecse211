@@ -1,13 +1,8 @@
 """
-Code used for demo on 23/03: works on the u turn map
+CODE IN PROGRESS
+v5.2
+Added function to follow the path backwards 'follow_path_backwards()'
 
-v5 of follow path
-
-In this version, we use two color sensors, one in front of the robot to follow the path accurately
-The second color sensor is static and on top of the delivery zone and its role is to detect the delivery color
-If the green line is detected, the goal is to keep driving unitl we have the wheels on the green zone (or until the second color sensor reads a delivery zone value)
-This is all done in this file
-We stop the robot after all 6 cubes have been delivered
 """
 
 from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
@@ -68,6 +63,77 @@ rightmotor.reset_encoder()
 # Initialize sensors
 wait_ready_sensors(True)
 print("Done waiting.")
+
+
+
+def turn_around():
+    """
+    from v5.1
+    Function to perform a 180 turn when we finish the track
+    """
+    t = 0
+    leftmotor.set_power(15)
+    rightmotor.set_power(15)
+    while t<0.5:
+        time.sleep(0.1)
+        t+=0.1
+    t = 0
+    leftmotor.set_power(-25)
+    rightmotor.set_power(10)
+    while t<1:
+        time.sleep(0.1)
+        t+=0.1
+    t = 0
+    leftmotor.set_power(0)
+    rightmotor.set_power(30)
+    while t<1.5:
+        time.sleep(0.1)
+        t+=0.1
+    t = 0
+    leftmotor.set_power(-25)
+    rightmotor.set_power(10)
+    while t<2:
+        time.sleep(0.1)
+        t+=0.1
+    leftmotor.set_power(0)
+    rightmotor.set_power(0)
+
+    print("Done")
+    time.sleep(4)
+
+
+def follow_path_backwards():
+    """
+    NEW IN v5.2
+    Function to follow the path on the way back to the loading bay
+    """
+    global green
+    color = get_color.get_mean_color(front_color_sensor)
+
+    if green == 6 and color == "yellow":
+        ES.emergency_stop()
+        
+    if color in mapblue:
+        leftmotor.set_power(-20)
+        rightmotor.set_power(65)
+
+    elif color in mapred: 
+
+        leftmotor.set_power(45)
+        rightmotor.set_power(-15)
+
+    elif color in mapgreen:
+
+        green+=1
+        print(green)
+        while color in mapgreen:
+            color= get_color.get_mean_color(front_color_sensor)
+            follow_path_carefully()
+    else:
+        leftmotor.set_power(20)
+        rightmotor.set_power(20)
+
+
 
 def move_to_cube_position(color_name):
     """
@@ -196,11 +262,24 @@ def follow_path():
     except BaseException as error:
         print(error)
 
+# Global variable to keep track of how many green lines were seen on the way back to the loading bay
+green = 0
+def full_lap():
+    """
+    v5.3
+    """
+    while not len(delivery_cubes)==0 and not sensor.is_pressed():
+        follow_path()
+    if sensor.is_pressed(): ES.emergency_stop()
+    turn_around()
+    while not sensor.is_pressed():
+        follow_path_backwards()
+
 # Main function
 time.sleep(4)
 try:
     while not sensor.is_pressed():
-        follow_path()
+        full_lap()
     ES.emergency_stop()
 except BaseException as error:
     print(error)
