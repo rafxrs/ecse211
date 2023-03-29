@@ -7,7 +7,7 @@ Changes from v5.3:
     - make the robot continue to follow the path and THEN move conveyor belt back
         to base position for maximum efficiency (not done yet)
     - make the piston have more power and turn faster so we don't have to push twice (not done yet)
-    
+
 """
 
 from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
@@ -34,6 +34,12 @@ mapgreen = ["map_green", "map_green_plus_tape", "green"]
 mapwhite = ["map_white", "white", "map_tape"]
 delivery_cubes = ["red", "orange", "yellow", "green", "blue", "purple"]
 delivery_zones = []
+
+#Global variable to keep track of what turn we were taking last
+last = "white"
+
+#Global variable for the delivery color
+delivery_color = ""
 
 POWER_LIMIT = 40       # Power limit (percentage)
 SPEED_LIMIT = 360      # Speed limit in degree per second
@@ -68,6 +74,45 @@ rightmotor.reset_encoder()
 # Initialize sensors
 wait_ready_sensors(True)
 print("Done waiting.")
+
+
+def adjust():
+    """
+    New in v5.4
+    Adjust the robot when we reach the green line depending on what turn we were taking previously
+    """
+    global last
+    # Adjust if we saw red last
+    path_color = get_color.get_mean_front_color(front_color_sensor)
+    while path_color in mapgreen:
+        path_color = get_color.get_mean_front_color(front_color_sensor)
+        leftmotor.set_power(-15)
+        rightmotor.set_power(-15)
+    
+    while last=="red":
+        path_color = get_color.get_mean_front_color(front_color_sensor)
+        if path_color not in mapred and path_color not in mapgreen:
+            leftmotor.set_power(-15)
+            rightmotor.set_power(-15)
+        else:
+            last = "white"
+            t=0
+            leftmotor.set_power(0)
+            rightmotor.set_power(20)
+            while t<0.7:
+                time.sleep(0.1)
+                t+=0.1
+                
+
+        # t=0
+        # leftmotor.set_power(-15)
+        # rightmotor.set_power(15)
+        # while t<0.7:
+        #     time.sleep(0.1)
+        #     t+=0.1
+        # leftmotor.set_power(0)
+        # rightmotor.set_power(0)
+
 
 
 
@@ -166,19 +211,22 @@ def push():
     pushmotor.set_position_relative(360)
     time.sleep(2)
 
-def drop(color):
+def drop():
     """
     Imported from v4
     Drops the cube of color 'color'
     First, we slide to get the right position
     Then, we push
     """
-    move_to_cube_position(color)
+    move_to_cube_position(delivery_color)
     pushmotor.set_limits(80, 500) # Set the power and speed limits
     # Push twice to make sure the cube falls off
     push()
     push()
     pushmotor.set_limits(POWER_LIMIT, SPEED_LIMIT) # Set the power and speed limits
+    move_to_base(delivery_color)
+    delivery_cubes.remove(delivery_color)
+    
     
 
 def follow_path_carefully():
@@ -205,7 +253,9 @@ def follow_path():
     Follow the path, slow down when green line is reached, get delivery color, drive carefully, drop cube, keep going
     """
     try:
-        
+        global delivery_color
+        global last
+
         # if len(delivery_cubes)==0:
         #     delivery_cubes.append("red")
         #     delivery_cubes.append("orange")
@@ -217,52 +267,63 @@ def follow_path():
         path_color= get_color.get_mean_color(front_color_sensor)
         zone_color = get_color.get_mean_zone_color(zone_color_sensor)
         
-        if path_color in mapred:
-            leftmotor.set_power(-20)
-            rightmotor.set_power(55)
+        # if path_color in mapred:
+        
+        #     last = "red"
+        #     leftmotor.set_power(-20)
+        #     rightmotor.set_power(55)
 
-        elif path_color in mapblue: 
+        if path_color in mapblue: 
+        
+            last = "blue"
             leftmotor.set_power(45)
             rightmotor.set_power(-15)
 
         elif path_color in mapgreen:
-            leftmotor.set_power(0)
-            rightmotor.set_power(0)
-            
-            while path_color in mapgreen:
+            if last=="red":
+                adjust()
+            else:
+                while path_color in mapgreen:
+                    zone_color = get_color.get_mean_zone_color(zone_color_sensor)
+                    path_color= get_color.get_mean_color(front_color_sensor)
+                    follow_path_carefully()
+                while zone_color not in delivery_cubes:
+                    zone_color = get_color.get_mean_zone_color(zone_color_sensor)
+                    path_color= get_color.get_mean_color(front_color_sensor)
+                    follow_path_carefully()
+
+                #Get the zone color sensor in the perfect position
+                t = 0
+                while t<0.5:
+                    time.sleep(0.1)
+                    follow_path_carefully()
+                    t+=0.1
+                leftmotor.set_power(0)
+                rightmotor.set_power(0)
+                time.sleep(1)
+
                 zone_color = get_color.get_mean_zone_color(zone_color_sensor)
-                path_color= get_color.get_mean_color(front_color_sensor)
-                follow_path_carefully()
-            while zone_color not in delivery_cubes:
-                zone_color = get_color.get_mean_zone_color(zone_color_sensor)
-                path_color= get_color.get_mean_color(front_color_sensor)
-                follow_path_carefully()
+                delivery_color = zone_color
 
-            t = 0
-            delivery_color = zone_color
-            while t<3.2:
-                time.sleep(0.1)
-                follow_path_carefully()
-                t+=0.1
-            leftmotor.set_power(0)
-            rightmotor.set_power(0)
+                while zone_color in delivery_cubes:
+                    zone_color = get_color.get_mean_zone_color(zone_color_sensor)
+                    path_color= get_color.get_mean_color(front_color_sensor)
+                    follow_path_carefully()
 
-            print("ZONE IS "+delivery_color)
-            drop(delivery_color)
-            print("DROPPED "+delivery_color)
-            delivery_cubes.remove(zone_color)
+                t = 0
+                while t<1:
+                    time.sleep(0.1)
+                    follow_path_carefully()
+                    t+=0.1
+                leftmotor.set_power(0)
+                rightmotor.set_power(0)
 
-            while zone_color == delivery_color:
-                zone_color = get_color.get_mean_zone_color(zone_color_sensor)
-                path_color= get_color.get_mean_color(front_color_sensor)
-                follow_path_carefully()
-            move_to_base(delivery_color)
-
-
+                print("ZONE IS "+delivery_color)
+                drop()
             
         else:
-            leftmotor.set_power(18)
-            rightmotor.set_power(20)
+            leftmotor.set_power(10)
+            rightmotor.set_power(40)
     
     except BaseException as error:
         print(error)
@@ -280,11 +341,14 @@ def full_lap():
     while not sensor.is_pressed():
         follow_path_backwards()
 
+
+
 # Main function
 time.sleep(4)
 try:
     while not sensor.is_pressed():
-        full_lap()
+        #full_lap()
+        follow_path()
     ES.emergency_stop()
 except BaseException as error:
     print(error)
