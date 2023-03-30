@@ -8,7 +8,7 @@ color we are currently seeing
 
 
 from colors import color_info
-import math
+import math, time
 from collections import deque
 
 # Color dictionary
@@ -203,6 +203,7 @@ def get_mean_front_color(front_color_sensor):
     return mean
 
 def get_mean_zone_color(zone_color_sensor):
+    time.sleep(0.1)
     color = closest_color(tuple(zone_color_sensor.get_rgb()))
     #print(color)
     mean = zone_mean_color(color)
