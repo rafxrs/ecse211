@@ -1,11 +1,11 @@
 """
 CODE IN PROGRESS
-v5.4
+v5.5
 
-Changes from v5.3:
-    - add a way to adjust the robot when we reach the green line 
-    - make the robot continue to follow the path and THEN move conveyor belt back
-        to base position for maximum efficiency (not done yet)
+LATEST VERSION FROM 04.03
+
+Changes from v5.4:
+- 
 
 """
 
@@ -129,6 +129,17 @@ def adjust():
             time.sleep(0.1)
             t+=0.1
 
+def adjust_after_green():
+    """ 
+    New in v5.5
+    """
+    t=0
+    leftmotor.set_power(30)
+    rightmotor.set_power(-20)
+    while t<0.7:
+        time.sleep(0.1)
+        t+=0.1
+
 def turn_around():
     """
     v5.1
@@ -143,11 +154,11 @@ def turn_around():
     t = 0
     leftmotor.set_power(-25)
     rightmotor.set_power(10)
-    while t<1:
+    while t<0.8:
         time.sleep(0.1)
         t+=0.1
     t = 0
-    leftmotor.set_power(0)
+    leftmotor.set_power(-10)
     rightmotor.set_power(30)
     while t<1.5:
         time.sleep(0.1)
@@ -170,7 +181,7 @@ def turn_around():
     rightmotor.set_power(2)
 
     print("Done")
-    time.sleep(4)
+    # time.sleep(4)
 
 
 def follow_path_backwards():
@@ -183,7 +194,15 @@ def follow_path_backwards():
     color = get_color.get_mean_color(front_color_sensor)
 
     if green >= 6 and color == "yellow":
-        ES.emergency_stop()
+        turn_around()
+        t = 0
+        leftmotor.set_power(20)
+        rightmotor.set_power(20)
+        while t<0.3:
+            time.sleep(0.1)
+            t+=0.1
+        leftmotor.set_power(0)
+        rightmotor.set_power(0)
         
     if color in mapblue:
         last_backwards="blue"
@@ -233,7 +252,7 @@ def push():
     Function to activate the piston
     """
     pushmotor.set_position_relative(360)
-    time.sleep(2)
+    time.sleep(1)
 
 def drop():
     """
@@ -244,7 +263,7 @@ def drop():
     """
     global delivery_cubes
     move_to_cube_position(delivery_color)
-    pushmotor.set_limits(80, 500) # Set the power and speed limits
+    pushmotor.set_limits(100, 1000) # Set the power and speed limits
     # Push twice to make sure the cube falls off
     push()
     move_to_base(delivery_color)
@@ -261,17 +280,17 @@ def follow_path_carefully():
     """
     path_color= get_color.get_mean_color(front_color_sensor)
     if path_color in mapred:
-        leftmotor.set_power(-5)
-        rightmotor.set_power(15)
+        leftmotor.set_power(-10)
+        rightmotor.set_power(20)
     elif path_color in mapblue: 
         leftmotor.set_power(20)
         rightmotor.set_power(-10)
     elif path_color in mapgreen:
-        leftmotor.set_power(10)
-        rightmotor.set_power(10)
-    else:
-        leftmotor.set_power(10)
+        leftmotor.set_power(14)
         rightmotor.set_power(14)
+    else:
+        leftmotor.set_power(15)
+        rightmotor.set_power(17)
     
 
 def follow_path():
@@ -283,13 +302,13 @@ def follow_path():
         global delivery_color
         global last
 
-        # if len(delivery_cubes)==0:
-        #     delivery_cubes.append("red")
-        #     delivery_cubes.append("orange")
-        #     delivery_cubes.append("yellow")
-        #     delivery_cubes.append("green")
-        #     delivery_cubes.append("blue")
-        #     delivery_cubes.append("purple")
+        if len(delivery_cubes)==0:
+            delivery_cubes.append("red")
+            delivery_cubes.append("orange")
+            delivery_cubes.append("yellow")
+            delivery_cubes.append("green")
+            delivery_cubes.append("blue")
+            delivery_cubes.append("purple")
         
         path_color= get_color.get_mean_color(front_color_sensor)
         # zone_color = get_color.get_mean_zone_color(zone_color_sensor)
@@ -321,7 +340,7 @@ def follow_path():
 
                 #Get the zone color sensor in the perfect position
                 t = 0
-                while t<0.8:
+                while t<0.3:
                     time.sleep(0.1)
                     follow_path_carefully()
                     t+=0.1
@@ -329,7 +348,7 @@ def follow_path():
                 rightmotor.set_power(0)
                 zone_color = get_color.get_mean_zone_color(zone_color_sensor)
                 delivery_color = zone_color
-                time.sleep(1)
+                # time.sleep(1)
 
                 
 
@@ -339,28 +358,32 @@ def follow_path():
                     follow_path_carefully()
 
                 t = 0
-                while t<0.5:
+                leftmotor.set_power(20)
+                rightmotor.set_power(20)
+                while t<0.1:
                     time.sleep(0.1)
-                    follow_path_carefully()
                     t+=0.1
                 leftmotor.set_power(0)
                 rightmotor.set_power(0)
 
                 print("ZONE IS "+delivery_color)
                 drop()
+                delivery_zones.append(delivery_color)
                 
-                if path_color in mapgreen:
-                    while path_color in mapgreen:
-                        path_color= get_color.get_mean_color(front_color_sensor)
-                        follow_path_carefully()
-
+                # if path_color in mapgreen:
+                #     while path_color in mapgreen:
+                #         path_color= get_color.get_mean_color(front_color_sensor)
+                #         follow_path_carefully()
                 
+        
+                #adjust_after_green()
+                    
 
                 last= "red"
             
         else:
-            leftmotor.set_power(18)
-            rightmotor.set_power(20)
+            leftmotor.set_power(27)
+            rightmotor.set_power(29)
     
     except BaseException as error:
         print(error)
@@ -377,6 +400,10 @@ def full_lap():
     turn_around()
     while not sensor.is_pressed():
         follow_path_backwards()
+    #Ask for more cubes
+    while not sensor.is_pressed():
+        time.sleep(0.1)
+
 
 
 
