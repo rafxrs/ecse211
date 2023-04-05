@@ -190,13 +190,14 @@ def get_last_10_bk(mean):
 # The MOST important funtion: continuously polls the color sensor, and takes the mean of every 10 polls
 # This function has shown through testing to be very precise
 def get_mean_color(color_sensor):
+    time.sleep(0.01)
     color = closest_color(tuple(color_sensor.get_rgb()))
     #print(color)
     mean = mean_color(color)
     return mean
 
 def get_mean_front_color(front_color_sensor):
-    # time.sleep(0.001)
+    #time.sleep(0.001)
     color = closest_color(tuple(front_color_sensor.get_rgb()))
     #print(color)
     mean = mean_front_color(color)
