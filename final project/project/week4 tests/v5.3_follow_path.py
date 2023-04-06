@@ -1,5 +1,4 @@
 """
-CODE IN PROGRESS
 v5.3
 Added function full_lap() to follow the path and drop cubes while there are still cubes to drop,
 stop the robot when all cubes are delivered, turn around 180 degrees and drive back to the base.
