@@ -1,11 +1,8 @@
 """
-CODE IN PROGRESS
 v5.4
 
 Changes from v5.3:
     - add a way to adjust the robot when we reach the green line 
-    - make the robot continue to follow the path and THEN move conveyor belt back
-        to base position for maximum efficiency (not done yet)
 
 """
 
