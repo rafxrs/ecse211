@@ -132,17 +132,6 @@ def adjust():
             time.sleep(0.1)
             t+=0.1
 
-def adjust_after_green():
-    """ 
-    New in v5.5
-    """
-    t=0
-    leftmotor.set_power(30)
-    rightmotor.set_power(-20)
-    while t<0.7:
-        time.sleep(0.1)
-        t+=0.1
-
 def turn_around():
     """
     v5.1
