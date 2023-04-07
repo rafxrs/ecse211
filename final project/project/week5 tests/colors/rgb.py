@@ -3,7 +3,7 @@ import time, math
 from utils.emergency_stop import ES
 
 def get_rgb():
-    color_sensor = EV3ColorSensor(2)
+    color_sensor = EV3ColorSensor(3)
     sensor = TouchSensor(1)
     wait_ready_sensors(True)
     print("Done waiting.")

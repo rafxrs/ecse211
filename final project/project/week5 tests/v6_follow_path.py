@@ -1,11 +1,8 @@
 """
 CODE IN PROGRESS
-v5.5
+v6
+FINAL VERSION
 
-LATEST VERSION FROM 04.03
-
-Changes from v5.4:
-- 
 
 """
 
@@ -13,7 +10,9 @@ from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
 from utils.emergency_stop import ES
 import time
 from colors import get_color
+from utils.sound import Sound
 
+more = Sound(duration=3.0, volume=100, pitch="E4")
 leftmotor = Motor("D")
 rightmotor = Motor("A")
 pushmotor= Motor("C")
@@ -28,14 +27,13 @@ CONSTANTS
 """
 
 # Names of the colors
-mapred = ["map_red", "map_red_plus_tape", "red"]
-mapblue = ["map_blue", "map_blue_plus_tape", "blue"]
+mapred = ["map_red", "map_red_plus_tape", "red", "redfront"]
+mapblue = ["map_blue", "map_blue_plus_tape", "blue", "bluefront"]
 mapgreen = ["map_green", "map_green_plus_tape", "green"]
 mapwhite = ["map_white", "white", "map_tape"]
-
+mapyellow = ["yellow", "yellowfront"]
 delivery_cubes = ["red", "orange", "yellow", "green", "blue", "purple"]
 delivery_zones = []
-directions_back = []
 
 #Global variable to keep track of what turn we were taking last
 last = "white"
@@ -54,9 +52,9 @@ cube_positions = {
     "red": 0,
     "orange": 98.3,
     "yellow": 196.60,
-    "green": 249.9,
-    "blue": 348.2,
-    "purple": 446.5
+    "green": 294.9,
+    "blue": 392.2,
+    "purple": 491.5
 }
 
 """
@@ -79,6 +77,10 @@ rightmotor.reset_encoder()
 wait_ready_sensors(True)
 print("Done waiting.")
 
+def play_sound(sound):
+    #Play a single note.
+    sound.play()
+    sound.wait_done()
 
 def adjust():
     """
@@ -138,40 +140,40 @@ def turn_around():
     v5.1
     Function to perform a 180 turn when we finish the track
     """
-    t = 0
-    leftmotor.set_power(15)
-    rightmotor.set_power(15)
-    while t<1:
-        time.sleep(0.1)
-        t+=0.1
+    # t = 0
+    # leftmotor.set_power(15)
+    # rightmotor.set_power(15)
+    # while t<1:
+    #     time.sleep(0.1)
+    #     t+=0.1
     t = 0
     leftmotor.set_power(-35)
-    rightmotor.set_power(20)
-    while t<0.4:
-        time.sleep(0.1)
-        t+=0.1
-    t = 0
-    leftmotor.set_power(-20)
     rightmotor.set_power(40)
-    while t<1:
+    while t<1.8:
         time.sleep(0.1)
         t+=0.1
-    t = 0
-    leftmotor.set_power(-35)
-    rightmotor.set_power(15)
-    while t<1:
-        time.sleep(0.1)
-        t+=0.1
-    leftmotor.set_power(0)
-    rightmotor.set_power(0)
-    t = 0
-    leftmotor.set_power(15)
-    rightmotor.set_power(15)
-    while t<0.5:
-        time.sleep(0.1)
-        t+=0.1
-    leftmotor.set_power(2)
-    rightmotor.set_power(2)
+    # t = 0
+    # leftmotor.set_power(-20)
+    # rightmotor.set_power(40)
+    # while t<1:
+    #     time.sleep(0.1)
+    #     t+=0.1
+    # t = 0
+    # leftmotor.set_power(-35)
+    # rightmotor.set_power(15)
+    # while t<1:
+    #     time.sleep(0.1)
+    #     t+=0.1
+    # leftmotor.set_power(0)
+    # rightmotor.set_power(0)
+    # t = 0
+    # leftmotor.set_power(15)
+    # rightmotor.set_power(15)
+    # while t<0.5:
+    #     time.sleep(0.1)
+    #     t+=0.1
+    # leftmotor.set_power(2)
+    # rightmotor.set_power(2)
 
     print("Done")
     # time.sleep(4)
@@ -197,17 +199,9 @@ def follow_path_backwards():
 
 
     color = get_color.get_mean_color(front_color_sensor)
-    if green >= 6 and color == "yellow":
-        leftmotor.set_power(0)
-        rightmotor.set_power(0)
-        time.sleep(1)
-        color = get_color.get_mean_color(front_color_sensor)
-        if color == "yellow":
-            yellow = True
-            
-            green = 0
-        else:
-            pass
+    if green >= 6 and color in mapyellow:
+        yellow = True
+
         
         
     elif color in mapblue:
@@ -218,7 +212,7 @@ def follow_path_backwards():
     elif color in mapred: 
         last_backwards="red"
         leftmotor.set_power(45)
-        rightmotor.set_power(-15)
+        rightmotor.set_power(-25)
 
     elif color in mapgreen:
         last = "white"
@@ -252,7 +246,7 @@ def move_to_base(current_color):
     Move to a base position on the conveyor belt, from current position 'color'
     """
     position = cube_positions[current_color]
-    slidemotor.set_position_relative((-1)*(position))
+    slidemotor.set_position_relative((-1)*(98.3*5))
 
 def push():
     """
@@ -409,15 +403,17 @@ def full_lap():
         if yellow:
             break
         follow_path_backwards()
+
+    print("back to base")
     turn_around()
     leftmotor.set_power(0)
     rightmotor.set_power(0)
     yellow = False
     #Ask for more cubes
-
-    while not startsensor.is_pressed():
-        print("waiting'")
-        time.sleep(0.1)
+    play_sound(more)
+    # while not startsensor.is_pressed():
+    #     print("waiting'")
+    #     time.sleep(0.1)
 
 
 
@@ -425,14 +421,16 @@ def full_lap():
 # Main function
 time.sleep(4)
 try:
+    # turn_around()
     while not sensor.is_pressed():
         while not startsensor.is_pressed():
             print("waiting")
             pass
         # wait until press
         full_lap()
-        #follow_path()
-        #follow_path_backwards()
+        
+        # follow_path()
+        # follow_path_backwards()
     ES.emergency_stop()
 except BaseException as error:
     print(error)

@@ -15,10 +15,13 @@ from collections import deque
 colors_dict = color_info.get_cd()
 
 # Names of the colors
-mapred = ["map_red", "map_red_plus_tape", "red"]
-mapblue = ["map_blue", "map_blue_plus_tape", "blue"]
+mapred = ["map_red", "map_red_plus_tape", "red", "redfront"]
+mapblue = ["map_blue", "map_blue_plus_tape", "blue", "bluefront"]
 mapgreen = ["map_green", "map_green_plus_tape", "green"]
 mapwhite = ["map_white", "white", "map_tape"]
+mapyellow = ["yellow", "yellowfront"]
+delivery_cubes = ["red", "orange", "yellow", "green", "blue", "purple"]
+delivery_zones = []
 
 
 # Define the threshold for color distance
@@ -118,6 +121,7 @@ def zone_mean_color(color_name):
         elif mode_color in mapblue: return "blue"
         elif mode_color in mapgreen: return "green"
         elif mode_color in mapwhite: return "white"
+        elif mode_color in mapyellow: return "yellow"
         return mode_color
     else:
         return "unknown"
@@ -190,14 +194,14 @@ def get_last_10_bk(mean):
 # The MOST important funtion: continuously polls the color sensor, and takes the mean of every 10 polls
 # This function has shown through testing to be very precise
 def get_mean_color(color_sensor):
-    time.sleep(0.01)
+    time.sleep(0.013)
     color = closest_color(tuple(color_sensor.get_rgb()))
     #print(color)
     mean = mean_color(color)
     return mean
 
 def get_mean_front_color(front_color_sensor):
-    #time.sleep(0.001)
+    time.sleep(0.01)
     color = closest_color(tuple(front_color_sensor.get_rgb()))
     #print(color)
     mean = mean_front_color(color)
