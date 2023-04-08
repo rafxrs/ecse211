@@ -25,10 +25,3 @@ colors_dictionary = {
 
 def get_cd() -> dict: 
     return colors_dictionary
-
-mapred = ["map_red", "map_red_plus_tape"]
-mapblue = ["map_blue", "map_blue_plus_tape"]
-mapgreen = ["map_green", "map_green_plus_tape"]
-mapwhite = ["map_white", "white", "map_tape"]
-delivery_zones = ["red_zone", "orange_zone", "green_zone", "blue_zone", "purple_zone"]
-delivery_cubes = ["red", "orange", "yellow", "green", "blue", "purple"]
