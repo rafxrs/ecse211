@@ -452,6 +452,9 @@ def find_placement():
 
     adjusted = True
 
+    #TO DO - when scanning for red and blue make robot go more forward and back
+    #instead of hard turn (tires slip)
+
 def full_lap():
     """
     v5.3
