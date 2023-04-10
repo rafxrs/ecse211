@@ -393,6 +393,12 @@ def follow_path():
 green = 0
 
 def find_placement():
+    """
+    New in v6.1
+    Adjust the robot when we reach the green line
+    Robot goes right until it sees the red path, then left until it sees the blue path
+    The robot then turns back right until it is correctly lined up on the white line
+    """
 
     global adjusted
 
