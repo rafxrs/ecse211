@@ -21,10 +21,10 @@ This file is for any color data related code
 colors_dictionary = {
     "black": {"mean": [0, 0, 0]},
     "white": {"mean": [300, 300, 200]},
-    "border": {"mean": [170, 170, 70]},
+    "border": {"mean": [175, 152, 79]},
     # "yellowside": {"mean": [230, 200, 20]},
     "yellow": {"mean": [330, 310, 30]},
-    "yellowfront": {"mean": [235, 200, 20]},
+    "yellowfront": {"mean": [200, 180, 15]},
     "orange": {"mean": [320, 110, 20]},
     "purple": {"mean": [240, 40, 50]},
     "map_white": {"mean": [300, 260, 170]},

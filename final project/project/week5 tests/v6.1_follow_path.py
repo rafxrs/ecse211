@@ -56,8 +56,8 @@ cube_positions = {
     "red": 0,
     "orange": 98.3,
     "yellow": 196.60,
-    "green": 290,
-    "blue": 380,
+    "green": 287,
+    "blue": 375,
     "purple": 491.5
 }
 
@@ -127,7 +127,7 @@ def adjust():
         t=0
         leftmotor.set_power(-15)
         rightmotor.set_power(-15)
-        while t<0.5:
+        while t<0.2:
             time.sleep(0.1)
             t+=0.1
 
@@ -135,7 +135,7 @@ def adjust():
         t=0
         leftmotor.set_power(20)
         rightmotor.set_power(-20)
-        while t<0.7:
+        while t<0.3:
             time.sleep(0.1)
             t+=0.1
 
@@ -147,36 +147,13 @@ def turn_around():
     
     leftmotor.set_power(20)
     rightmotor.set_power(20)
-    time.sleep(1)
+    time.sleep(0.5)
     
     leftmotor.set_power(-35)
     rightmotor.set_power(40)
-    time.sleep(2)
-    # t = 0
-    # leftmotor.set_power(-20)
-    # rightmotor.set_power(40)
-    # while t<1:
-    #     time.sleep(0.1)
-    #     t+=0.1
-    # t = 0
-    # leftmotor.set_power(-35)
-    # rightmotor.set_power(15)
-    # while t<1:
-    #     time.sleep(0.1)
-    #     t+=0.1
-    # leftmotor.set_power(0)
-    # rightmotor.set_power(0)
-    # t = 0
-    # leftmotor.set_power(15)
-    # rightmotor.set_power(15)
-    # while t<0.5:
-    #     time.sleep(0.1)
-    #     t+=0.1
-    # leftmotor.set_power(2)
-    # rightmotor.set_power(2)
+    time.sleep(1.5)
 
     print("Done")
-    # time.sleep(4)
 
 
 def follow_path_backwards():
@@ -197,13 +174,10 @@ def follow_path_backwards():
             delivery_cubes.append("blue")
             delivery_cubes.append("purple")
 
-
     color = get_color.get_mean_color(front_color_sensor)
     if green >= 6 and color in mapyellow:
         yellow = True
 
-        
-        
     elif color in mapblue:
         last_backwards="blue"
         leftmotor.set_power(-20)
@@ -282,17 +256,17 @@ def follow_path_carefully():
     """
     path_color= get_color.get_mean_color(front_color_sensor)
     if path_color in mapred:
-        leftmotor.set_power(-12)
-        rightmotor.set_power(18)
+        leftmotor.set_power(-5)
+        rightmotor.set_power(20)
     elif path_color in mapblue: 
-        leftmotor.set_power(18)
-        rightmotor.set_power(-12)
+        leftmotor.set_power(20)
+        rightmotor.set_power(-5)
     elif path_color in mapgreen:
         leftmotor.set_power(12)
-        rightmotor.set_power(12)
+        rightmotor.set_power(13)
     else:
         leftmotor.set_power(8)
-        rightmotor.set_power(14)
+        rightmotor.set_power(12)
     
 
 def follow_path():
@@ -404,51 +378,57 @@ def find_placement():
 
     leftmotor.set_power(-30)
     rightmotor.set_power(-30)
-    time.sleep(0.4)
+    time.sleep(0.5)
     leftmotor.set_power(0)
     rightmotor.set_power(0)
     path_color= get_color.get_mean_color(front_color_sensor)
+
     while path_color not in mapred:
         path_color= get_color.get_mean_color(front_color_sensor)
-        leftmotor.set_power(38)
-        rightmotor.set_power(-10)
         if path_color in mapgreen:
             path_color= get_color.get_mean_color(front_color_sensor)
             leftmotor.set_power(-30)
             rightmotor.set_power(-30)
             time.sleep(0.02)
+        else:
+            path_color= get_color.get_mean_color(front_color_sensor)
+            leftmotor.set_power(30)
+            rightmotor.set_power(-10)
 
     while path_color not in mapblue:
         path_color= get_color.get_mean_color(front_color_sensor)
-        leftmotor.set_power(-10)
-        rightmotor.set_power(38)
         if path_color in mapgreen:
             path_color= get_color.get_mean_color(front_color_sensor)
-            leftmotor.set_power(-30)
-            rightmotor.set_power(-30)
-            time.sleep(0.02)
-                
-    #t=0
-    #leftmotor.set_power(40)
-    #rightmotor.set_power(-10)
-    #while t<0.2:
-    #    time.sleep(0.1)
-    #    t+=0.1
-    
-    leftmotor.set_power(10)
-    rightmotor.set_power(-25)
+            leftmotor.set_power(-15)
+            rightmotor.set_power(-15)
+            time.sleep(0.01)
+        else:
+            path_color= get_color.get_mean_color(front_color_sensor)
+            leftmotor.set_power(-10)
+            rightmotor.set_power(30)
+        
+    #leftmotor.set_power(-20)
+    #rightmotor.set_power(-20)
+    #time.sleep(0.3)
 
-    while path_color not in mapwhite:
+    while path_color not in mapwhite: 
         path_color= get_color.get_mean_color(front_color_sensor)
-        leftmotor.set_power(15)
-        rightmotor.set_power(-35)
-        time.sleep(0.06)
         if path_color in mapgreen:
             path_color= get_color.get_mean_color(front_color_sensor)
-            leftmotor.set_power(-30)
-            rightmotor.set_power(-30)
-        leftmotor.set_power(20)
-        rightmotor.set_power(-35)
+            leftmotor.set_power(-10)
+            rightmotor.set_power(-10)
+            time.sleep(0.3)
+        else:
+            path_color= get_color.get_mean_color(front_color_sensor)
+            leftmotor.set_power(-10)
+            rightmotor.set_power(-35)
+            time.sleep(0.12)
+            leftmotor.set_power(30)
+            rightmotor.set_power(10)
+            time.sleep(0.14)
+
+    leftmotor.set_power(10)
+    rightmotor.set_power(15)
 
     adjusted = True
 
@@ -460,11 +440,13 @@ def full_lap():
     v5.3
     """
     global yellow
+    global green
     
     while not len(delivery_cubes)==0 and not sensor.is_pressed():
         follow_path()
     if sensor.is_pressed(): ES.emergency_stop()
     turn_around()
+    green=0
     while not sensor.is_pressed():
         if yellow:
             break
@@ -494,6 +476,7 @@ try:
             pass
         # wait until press
         full_lap()
+                #add belt reset
         
         # follow_path()
         # follow_path_backwards()
