@@ -1,5 +1,6 @@
 """
 This file is for any color data related code
+It contains the dictionary of RGB values for each color on the map
 """
 
 colors_dictionary = {

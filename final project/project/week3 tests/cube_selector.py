@@ -1,4 +1,5 @@
 """
+Fourth version of software
 Program for the sliding mechanism
 """
 
@@ -31,16 +32,6 @@ cube_positions = {
     "blue": 393.2,
     "purple": 491.5
 }
-
-def get_cube_positions():
-    return cube_positions
-
-cubes_and_positions = {
-    "red": 0, "orange":1, "yellow":2, "green":3, "blue":4, "purple":5
-    }
-
-def get_cubes_and_positions():
-    return cubes_and_positions
 
 #Move to a specific cube position: works with color name
 def move_to_cube_position(color_name):

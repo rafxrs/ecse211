@@ -53,7 +53,7 @@ cube_positions = {
     "orange": 98.3,
     "yellow": 196.60,
     "green": 294.9,
-    "blue": 392.2,
+    "blue": 393.2,
     "purple": 491.5
 }
 

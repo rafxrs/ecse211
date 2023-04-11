@@ -1,5 +1,6 @@
 """
 This file is for any color data related code
+It contains the dictionary of RGB values for each color on the map
 """
 
 colors_dictionary = {
@@ -21,8 +22,3 @@ colors_dictionary = {
 def get_cd() -> dict: 
     return colors_dictionary
 
-mapred = ["map_red", "map_red_plus_tape"]
-mapblue = ["map_blue", "map_blue_plus_tape"]
-mapgreen = ["map_green", "map_green_plus_tape"]
-mapwhite = ["map_white", "white", "map_tape"]
-delivery_cubes = ["red", "orange", "yellow", "green", "blue", "purple"]

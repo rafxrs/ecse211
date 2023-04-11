@@ -1,16 +1,15 @@
 """
-CODE IN PROGRESS
-
-Third version of the follow path algorithm
+Third version of tsoftware
+This version includes versions 3.0, 3.1, 3.2, 3.3
 In this version, we use two color sensors, one far ahead of the robot to follow the path accurately
 The second color sensor is parallel to the wheels on the robot and its role is to detect the green line
 If the green line is detected, the goal is to perform a 90° right turn, read the color, and a 90° turn left
 This is all done in this file
 Four different tests:
-- 90° turn left and right --> function turn(direction)
-- 90° turn when green is detected --> functions turn(direction) and follow_path()
-- 90° turn when green is detected + adjust robot by driving backwards + read the color --> functions turn(direction), drive_backwards() and follow_path()
-- 90° turn when green is detected, read the color, adjust, 90° turn left, adjust, keep driving --> functions turn(direction), drive_backwards(), drive_forward(), read() and follow_path()
+- 90° turn left and right --> function turn(direction) (v3.0)
+- 90° turn when green is detected --> functions turn(direction) and follow_path() (v3.1)
+- 90° turn when green is detected + adjust robot by driving backwards + read the color --> functions turn(direction), drive_backwards() and follow_path() (v3.2)
+- 90° turn when green is detected, read the color, adjust, 90° turn left, adjust, keep driving --> functions turn(direction), drive_backwards(), drive_forward(), read() and follow_path() (v3.3)
 """
 
 from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
@@ -35,6 +34,10 @@ POWER_LIMIT = 40       # Power limit (percentage)
 SPEED_LIMIT = 360      # Speed limit in degree per second
 
 def turn(direction):
+    """
+    Implemented in version 3.0
+    Function to turn 90 degrees left or right
+    """
     leftmotor.reset_encoder()                      # Reset encoder to 0 value
     leftmotor.set_limits(POWER_LIMIT, SPEED_LIMIT) # Set the power and speed limits
     rightmotor.reset_encoder()                      # Reset encoder to 0 value
@@ -52,6 +55,7 @@ def turn(direction):
 
 def drive_backwards():
     """
+    New in v3.2
     Drive slighly backwards
     """
     leftmotor.reset_encoder()                      # Reset encoder to 0 value
@@ -63,6 +67,7 @@ def drive_backwards():
 
 def drive_forward():
     """
+    New in v3.2
     Drive slightly forward
     """
     leftmotor.reset_encoder()                      # Reset encoder to 0 value
@@ -75,6 +80,7 @@ def drive_forward():
 
 def follow_path_without_back_sensor():
     """
+    New in v3.3
     To follow the path only with the front sensor:
     We need this function when the back sensor reads green
     If we only use follow_path(), when the back sensor sees green, it will keep turning right and left and read the delivery color
@@ -139,14 +145,6 @@ def follow_path():
 time.sleep(4)
 try:
     while not sensor.is_pressed():
-        # Comment out the lines you don't want to test
-
-        # turn("right")
-        # drive_backwards()
-        
-        # turn("left")
-        # drive_forward()
-        
         follow_path()
     ES.emergency_stop()
 except BaseException as error:

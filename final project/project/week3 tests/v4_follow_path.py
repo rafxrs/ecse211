@@ -1,7 +1,6 @@
-"""
-CODE IN PROGRESS
+"""""
 
-Fourth version of the follow path algorithm
+Fourth version of software
 In this version, we use two color sensors, one far ahead of the robot to follow the path accurately
 The second color sensor is static and on top of the delivery zone and its role is to detect the delivery color
 If the green line is detected, the goal is to keep driving unitl we have the wheels on the green zone (or until the second color sensor reads a delivery zone value)
@@ -76,7 +75,6 @@ def follow_path():
     Here, we follow the path, and when our zone color sensor stops seeing white, which means we reached a delivery zone,
     we get the color that the zone color sensor is seeing, slide the cube of that colour in the dropoff position, and push it
     
-    This code is not entirely working yet
     """
     try:
         

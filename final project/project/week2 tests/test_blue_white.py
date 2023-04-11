@@ -131,16 +131,6 @@ def follow_path():
         path_color= get_color()
         last = get_last_30(path_color)
 
-        #print("last 30 mean: "+last)
-
-        #path_color = "aha"
-        #print(color_sensor.get_rgb())
-        # if path_color == "yellow":
-        #     leftmotor.set_power(12)
-        #     rightmotor.set_power(12)
-        # elif path_color == "red" or path_color == "map_red" or path_color == "map_red_plus_tape":
-        #     leftmotor.set_power(8)
-        #     rightmotor.set_power(30)
         if path_color == "blue" or path_color == "map_blue" or path_color == "map_blue_plus_tape": 
             leftmotor.set_power(8)
             rightmotor.set_power(30)

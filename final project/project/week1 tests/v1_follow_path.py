@@ -28,6 +28,9 @@ def emergency_stop():
         BP.reset_all()
         exit()
 
+"""
+Dictionary to keep track of mean RGB values of each color
+"""
 colors = {
     "black": {"mean": [0, 0, 0]},
     "white": {"mean": [300, 300, 200]},
