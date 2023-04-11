@@ -117,10 +117,7 @@ def drop(color):
 
 def follow_path_carefully():
     """
-    To follow the path only with the front sensor:
-    We need this function when the back sensor reads the zone color
-    If we only use follow_path(), when the back sensor sees green, it will keep turning right and left and read the delivery color
-    We need to get to the next green line, so if we need to ignore the back sensor and keep driving we can use this function
+    imported from v4
     """
     path_color= get_color.get_mean_color(front_color_sensor)
     if path_color in mapred:

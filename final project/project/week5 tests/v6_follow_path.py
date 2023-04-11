@@ -140,43 +140,13 @@ def turn_around():
     v5.1
     Function to perform a 180 turn when we finish the track
     """
-    # t = 0
-    # leftmotor.set_power(15)
-    # rightmotor.set_power(15)
-    # while t<1:
-    #     time.sleep(0.1)
-    #     t+=0.1
     t = 0
     leftmotor.set_power(-35)
     rightmotor.set_power(40)
     while t<1.8:
         time.sleep(0.1)
         t+=0.1
-    # t = 0
-    # leftmotor.set_power(-20)
-    # rightmotor.set_power(40)
-    # while t<1:
-    #     time.sleep(0.1)
-    #     t+=0.1
-    # t = 0
-    # leftmotor.set_power(-35)
-    # rightmotor.set_power(15)
-    # while t<1:
-    #     time.sleep(0.1)
-    #     t+=0.1
-    # leftmotor.set_power(0)
-    # rightmotor.set_power(0)
-    # t = 0
-    # leftmotor.set_power(15)
-    # rightmotor.set_power(15)
-    # while t<0.5:
-    #     time.sleep(0.1)
-    #     t+=0.1
-    # leftmotor.set_power(2)
-    # rightmotor.set_power(2)
-
-    print("Done")
-    # time.sleep(4)
+   
 
 
 def follow_path_backwards():

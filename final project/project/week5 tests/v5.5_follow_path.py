@@ -82,7 +82,7 @@ print("Done waiting.")
 
 def adjust():
     """
-    New in v5.4
+    from v5.4
     Adjust the robot when we reach the green line depending on what turn we were taking previously
     """
     global last
@@ -139,42 +139,11 @@ def turn_around():
     Function to perform a 180 turn when we finish the track
     """
     t = 0
-    leftmotor.set_power(15)
-    rightmotor.set_power(15)
-    while t<1:
-        time.sleep(0.1)
-        t+=0.1
-    t = 0
     leftmotor.set_power(-35)
-    rightmotor.set_power(20)
-    while t<0.4:
-        time.sleep(0.1)
-        t+=0.1
-    t = 0
-    leftmotor.set_power(-20)
     rightmotor.set_power(40)
-    while t<1:
+    while t<1.8:
         time.sleep(0.1)
         t+=0.1
-    t = 0
-    leftmotor.set_power(-35)
-    rightmotor.set_power(15)
-    while t<1:
-        time.sleep(0.1)
-        t+=0.1
-    leftmotor.set_power(0)
-    rightmotor.set_power(0)
-    t = 0
-    leftmotor.set_power(15)
-    rightmotor.set_power(15)
-    while t<0.5:
-        time.sleep(0.1)
-        t+=0.1
-    leftmotor.set_power(2)
-    rightmotor.set_power(2)
-
-    print("Done")
-    # time.sleep(4)
 
 
 def follow_path_backwards():
@@ -281,10 +250,7 @@ def drop():
 
 def follow_path_carefully():
     """
-    To follow the path only with the front sensor:
-    We need this function when the back sensor reads the zone color
-    If we only use follow_path(), when the back sensor sees green, it will keep turning right and left and read the delivery color
-    We need to get to the next green line, so if we need to ignore the back sensor and keep driving we can use this function
+   imported from v4
     """
     path_color= get_color.get_mean_color(front_color_sensor)
     if path_color in mapred:

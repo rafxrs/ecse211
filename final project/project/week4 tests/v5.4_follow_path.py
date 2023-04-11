@@ -2,8 +2,7 @@
 v5.4
 
 Changes from v5.3:
-    - add a way to adjust the robot when we reach the green line 
-
+added a way to adjust the robot when we reach the green line 
 """
 
 from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
@@ -132,43 +131,11 @@ def turn_around():
     Function to perform a 180 turn when we finish the track
     """
     t = 0
-    leftmotor.set_power(15)
-    rightmotor.set_power(15)
-    while t<1:
+    leftmotor.set_power(-35)
+    rightmotor.set_power(40)
+    while t<1.8:
         time.sleep(0.1)
         t+=0.1
-    t = 0
-    leftmotor.set_power(-25)
-    rightmotor.set_power(10)
-    while t<1:
-        time.sleep(0.1)
-        t+=0.1
-    t = 0
-    leftmotor.set_power(0)
-    rightmotor.set_power(30)
-    while t<1.5:
-        time.sleep(0.1)
-        t+=0.1
-    t = 0
-    leftmotor.set_power(-25)
-    rightmotor.set_power(10)
-    while t<2.5:
-        time.sleep(0.1)
-        t+=0.1
-    leftmotor.set_power(0)
-    rightmotor.set_power(0)
-    t = 0
-    leftmotor.set_power(15)
-    rightmotor.set_power(15)
-    while t<0.5:
-        time.sleep(0.1)
-        t+=0.1
-    leftmotor.set_power(2)
-    rightmotor.set_power(2)
-
-    print("Done")
-    time.sleep(4)
-
 
 def follow_path_backwards():
     """
@@ -251,10 +218,7 @@ def drop():
 
 def follow_path_carefully():
     """
-    To follow the path only with the front sensor:
-    We need this function when the back sensor reads the zone color
-    If we only use follow_path(), when the back sensor sees green, it will keep turning right and left and read the delivery color
-    We need to get to the next green line, so if we need to ignore the back sensor and keep driving we can use this function
+    imported from v4
     """
     path_color= get_color.get_mean_color(front_color_sensor)
     if path_color in mapred:
@@ -276,20 +240,10 @@ def follow_path():
     Follow the path, slow down when green line is reached, get delivery color, drive carefully, drop cube, keep going
     """
     try:
-        # time.sleep(0.01)
         global delivery_color
         global last
-
-        # if len(delivery_cubes)==0:
-        #     delivery_cubes.append("red")
-        #     delivery_cubes.append("orange")
-        #     delivery_cubes.append("yellow")
-        #     delivery_cubes.append("green")
-        #     delivery_cubes.append("blue")
-        #     delivery_cubes.append("purple")
         
         path_color= get_color.get_mean_color(front_color_sensor)
-        # zone_color = get_color.get_mean_zone_color(zone_color_sensor)
         
         if path_color in mapred:
         
@@ -316,7 +270,7 @@ def follow_path():
                     path_color= get_color.get_mean_color(front_color_sensor)
                     follow_path_carefully()
 
-                #Get the zone color sensor in the perfect position
+                # Get the zone color sensor in the perfect position
                 t = 0
                 while t<0.8:
                     time.sleep(0.1)

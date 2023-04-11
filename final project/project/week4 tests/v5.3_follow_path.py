@@ -1,12 +1,13 @@
 """
 v5.3
+
+Changes from v5.2:
 Added function full_lap() to follow the path and drop cubes while there are still cubes to drop,
 stop the robot when all cubes are delivered, turn around 180 degrees and drive back to the base.
 
 This code works on the map used for the demo (the one with the u-turn)
-Does NOT work on counterclockwise medium map due to need for adjuste=ment when we reach the green line
+Does NOT work on counterclockwise medium map due to need for adjustment when we reach the green line
 This is to be added on 03.28 in the version 5.4
-
 """
 
 from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
@@ -76,34 +77,11 @@ def turn_around():
     Function to perform a 180 turn when we finish the track
     """
     t = 0
-    leftmotor.set_power(15)
-    rightmotor.set_power(15)
-    while t<0.5:
+    leftmotor.set_power(-35)
+    rightmotor.set_power(40)
+    while t<1.8:
         time.sleep(0.1)
         t+=0.1
-    t = 0
-    leftmotor.set_power(-25)
-    rightmotor.set_power(10)
-    while t<1:
-        time.sleep(0.1)
-        t+=0.1
-    t = 0
-    leftmotor.set_power(0)
-    rightmotor.set_power(30)
-    while t<1.5:
-        time.sleep(0.1)
-        t+=0.1
-    t = 0
-    leftmotor.set_power(-25)
-    rightmotor.set_power(10)
-    while t<2:
-        time.sleep(0.1)
-        t+=0.1
-    leftmotor.set_power(0)
-    rightmotor.set_power(0)
-
-    print("Done")
-    time.sleep(4)
 
 
 def follow_path_backwards():
@@ -184,10 +162,7 @@ def drop(color):
 
 def follow_path_carefully():
     """
-    To follow the path only with the front sensor:
-    We need this function when the back sensor reads the zone color
-    If we only use follow_path(), when the back sensor sees green, it will keep turning right and left and read the delivery color
-    We need to get to the next green line, so if we need to ignore the back sensor and keep driving we can use this function
+    imported from v4
     """
     path_color= get_color.get_mean_color(front_color_sensor)
     if path_color in mapred:

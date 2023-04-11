@@ -1,6 +1,7 @@
 """
-CODE IN PROGRESS
 v5.2
+
+Changes from v5.1:
 Added function to follow the path backwards 'follow_path_backwards()'
 
 """
@@ -72,34 +73,11 @@ def turn_around():
     Function to perform a 180 turn when we finish the track
     """
     t = 0
-    leftmotor.set_power(15)
-    rightmotor.set_power(15)
-    while t<0.5:
+    leftmotor.set_power(-35)
+    rightmotor.set_power(40)
+    while t<1.8:
         time.sleep(0.1)
         t+=0.1
-    t = 0
-    leftmotor.set_power(-25)
-    rightmotor.set_power(10)
-    while t<1:
-        time.sleep(0.1)
-        t+=0.1
-    t = 0
-    leftmotor.set_power(0)
-    rightmotor.set_power(30)
-    while t<1.5:
-        time.sleep(0.1)
-        t+=0.1
-    t = 0
-    leftmotor.set_power(-25)
-    rightmotor.set_power(10)
-    while t<2:
-        time.sleep(0.1)
-        t+=0.1
-    leftmotor.set_power(0)
-    rightmotor.set_power(0)
-
-    print("Done")
-    time.sleep(4)
 
 
 def follow_path_backwards():
