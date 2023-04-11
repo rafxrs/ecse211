@@ -5,7 +5,7 @@ In this version, we use two color sensors, one far ahead of the robot to follow 
 The second color sensor is parallel to the wheels on the robot and its role is to detect the green line
 If the green line is detected, the goal is to perform a 90° right turn, read the color, and a 90° turn left
 This is all done in this file
-Four different tests:
+Four different scenarios:
 - 90° turn left and right --> function turn(direction) (v3.0)
 - 90° turn when green is detected --> functions turn(direction) and follow_path() (v3.1)
 - 90° turn when green is detected + adjust robot by driving backwards + read the color --> functions turn(direction), drive_backwards() and follow_path() (v3.2)
