@@ -35,7 +35,6 @@ mapwhite = ["map_white", "white", "map_tape"]
 
 delivery_cubes = ["red", "orange", "yellow", "green", "blue", "purple"]
 delivery_zones = []
-directions_back = []
 
 #Global variable to keep track of what turn we were taking last
 last = "white"
@@ -364,6 +363,8 @@ green = 0
 def full_lap():
     """
     v5.3
+    While there are cubes to deliver, follow the path
+    When all cubes are delivered, turn around and drive back to bay
     """
     global yellow
     

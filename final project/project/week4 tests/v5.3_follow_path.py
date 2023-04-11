@@ -246,7 +246,9 @@ def follow_path():
 green = 0
 def full_lap():
     """
-    v5.3
+    New in v5.3
+    While there are cubes to deliver, follow the path
+    When all cubes are delivered, turn around and drive back to bay
     """
     while not len(delivery_cubes)==0 and not sensor.is_pressed():
         follow_path()
