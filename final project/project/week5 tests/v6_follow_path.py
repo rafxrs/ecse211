@@ -198,7 +198,9 @@ def drop():
     
 
 def follow_path_carefully():
-    
+    """
+    New in v5
+    """
     path_color= get_color.get_mean_color(front_color_sensor)
     if path_color in mapred:
         leftmotor.set_power(-14)

@@ -162,7 +162,7 @@ def drop(color):
 
 def follow_path_carefully():
     """
-    imported from v4
+    New in v5
     """
     path_color= get_color.get_mean_color(front_color_sensor)
     if path_color in mapred:

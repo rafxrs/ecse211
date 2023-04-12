@@ -1,6 +1,5 @@
 """
 Code used for demo on 23/03: works on the u turn map
-
 v5 of follow path
 
 Major changes from v4:
@@ -12,7 +11,6 @@ If the green line is detected, the goal is to keep driving unitl we have the whe
 This is all done in this file
 We stop the robot after all 6 cubes have been delivered
 """
-
 from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
 from utils.emergency_stop import ES
 import time
@@ -25,10 +23,6 @@ slidemotor = Motor("B")
 front_color_sensor = EV3ColorSensor(3)
 zone_color_sensor = EV3ColorSensor(2)
 sensor = TouchSensor(1)
-
-"""
-CONSTANTS
-"""
 
 # Names of the colors
 mapred = ["map_red", "map_red_plus_tape", "red"]
@@ -51,10 +45,6 @@ cube_positions = {
     "blue": 196.60,
     "purple": 294.9
 }
-
-"""
-INITIALIZE MOTORS
-"""
 
 slidemotor.reset_encoder()                      # Reset encoder to 0 value
 slidemotor.set_limits(POWER_LIMIT, SPEED_LIMIT) # Set the power and speed limits
@@ -117,7 +107,8 @@ def drop(color):
 
 def follow_path_carefully():
     """
-    imported from v4
+    New in v5
+    We follow the path the same way as normally, but we go slower
     """
     path_color= get_color.get_mean_color(front_color_sensor)
     if path_color in mapred:
@@ -136,14 +127,6 @@ def follow_path():
     Follow the path, slow down when green line is reached, get delivery color, drive carefully, drop cube, keep going
     """
     try:
-        
-        # if len(delivery_cubes)==0:
-        #     delivery_cubes.append("red")
-        #     delivery_cubes.append("orange")
-        #     delivery_cubes.append("yellow")
-        #     delivery_cubes.append("green")
-        #     delivery_cubes.append("blue")
-        #     delivery_cubes.append("purple")
         
         path_color= get_color.get_mean_color(front_color_sensor)
         zone_color = get_color.get_mean_zone_color(zone_color_sensor)

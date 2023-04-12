@@ -4,7 +4,6 @@ Added a start sensor and a way to do mutliple runs:
 - startsensor tells the robot to start delivering (calling the full lap function)
 - When a lap is over, we add all 6 delivery colors back to the delivery cubes list
 """
-
 from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
 from utils.emergency_stop import ES
 import time
@@ -19,23 +18,17 @@ zone_color_sensor = EV3ColorSensor(2)
 sensor = TouchSensor(1)
 startsensor = TouchSensor(4)
 
-"""
-CONSTANTS
-"""
-
 # Names of the colors
 mapred = ["map_red", "map_red_plus_tape", "red"]
 mapblue = ["map_blue", "map_blue_plus_tape", "blue"]
 mapgreen = ["map_green", "map_green_plus_tape", "green"]
 mapwhite = ["map_white", "white", "map_tape"]
-
 delivery_cubes = ["red", "orange", "yellow", "green", "blue", "purple"]
 delivery_zones = []
 
 #Global variable to keep track of what turn we were taking last
 last = "white"
 yellow = False
-
 #Global variable for the delivery color
 delivery_color = ""
 
@@ -53,28 +46,18 @@ cube_positions = {
     "purple": 446.5
 }
 
-"""
-INITIALIZE MOTORS
-"""
-
 slidemotor.reset_encoder()                      # Reset encoder to 0 value
 slidemotor.set_limits(POWER_LIMIT, SPEED_LIMIT) # Set the power and speed limits
 slidemotor.set_power(0)
-
 pushmotor.reset_encoder()                      # Reset encoder to 0 value
 pushmotor.set_limits(POWER_LIMIT, SPEED_LIMIT) # Set the power and speed limits
 pushmotor.set_power(0)
-
 leftmotor.reset_encoder() 
 rightmotor.reset_encoder() 
-
 
 # Initialize sensors
 wait_ready_sensors(True)
 print("Done waiting.")
-
-
-
 
 def turn_around():
     """
@@ -87,7 +70,6 @@ def turn_around():
     while t<1.8:
         time.sleep(0.1)
         t+=0.1
-
 
 def follow_path_backwards():
     """
@@ -203,11 +185,9 @@ def drop():
     move_to_base(delivery_color)
     delivery_cubes.remove(delivery_color)
     
-    
-
 def follow_path_carefully():
     """
-   imported from v4
+    New in v5
     """
     path_color= get_color.get_mean_color(front_color_sensor)
     if path_color in mapred:

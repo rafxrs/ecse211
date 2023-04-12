@@ -104,12 +104,9 @@ def follow_path():
     Then the robot keeps driving until the next green line
     """
     try:
-        
         delivery_colors = []
-
         front_color= get_color.get_mean_front_color(front_color_sensor)
         back_color= get_color.get_mean_back_color(back_color_sensor)
-        #last = get_color.get_last_20(wheel_color)
         
         if back_color not in mapgreen:
             if front_color in mapred:
@@ -134,9 +131,6 @@ def follow_path():
             while back_color in mapgreen:
                 back_color= get_color.get_mean_back_color(back_color_sensor)
                 follow_path_without_back_sensor()
-
-
-    
     except BaseException as error:
         print(error)
 

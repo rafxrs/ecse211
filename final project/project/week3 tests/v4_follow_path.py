@@ -1,5 +1,4 @@
 """""
-
 Fourth version of software
 In this version, we use two color sensors, one far ahead of the robot to follow the path accurately
 The second color sensor is static and on top of the delivery zone and its role is to detect the delivery color
@@ -58,7 +57,6 @@ def push():
     pushmotor.set_position_relative(360)
     time.sleep(3)
 
-
 def drop(color):
     """
     Drops the cube of color 'color'
@@ -77,13 +75,9 @@ def follow_path():
     
     """
     try:
-        
         delivery_colors = []
-
         front_color= get_color.get_mean_front_color(front_color_sensor)
         zone_color = get_color.get_mean_back_color(zone_color_sensor)
-        #
-        
         if zone_color in mapwhite:
             if front_color in mapred:
                 leftmotor.set_power(8)
@@ -104,10 +98,8 @@ def follow_path():
                 zone_color = get_color.get_mean_back_color(zone_color_sensor)
                 leftmotor.set_power(19)
                 rightmotor.set_power(19)
-            
     except BaseException as error:
         print(error)
-
 
 # Main function
 time.sleep(4)

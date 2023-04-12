@@ -38,7 +38,6 @@ colors = {
     "green": {"mean": [37,100,20]},
     "map_green_plus_tape": {"mean": [50,120,30]},
     }
-
 mapred = ["map_red", "map_red_plus_tape", "red"]
 mapblue = ["map_blue", "map_blue_plus_tape", "blue"]
 mapgreen = ["map_green", "map_green_plus_tape", "green"]
