@@ -312,10 +312,9 @@ green = 0
 
 def full_lap():
     """
-    v5.3
+    v5.3, changed in v5.5, changed in v6 again to add the play_sound() function
     """
     global yellow
-    
     while not len(delivery_cubes)==0 and not sensor.is_pressed():
         follow_path()
     if sensor.is_pressed(): ES.emergency_stop()
@@ -324,34 +323,21 @@ def full_lap():
         if yellow:
             break
         follow_path_backwards()
-
-    print("back to base")
     turn_around()
     leftmotor.set_power(0)
     rightmotor.set_power(0)
     yellow = False
     #Ask for more cubes
     play_sound(more)
-    # while not startsensor.is_pressed():
-    #     print("waiting'")
-    #     time.sleep(0.1)
-
-
-
 
 # Main function
 time.sleep(4)
 try:
-    # turn_around()
     while not sensor.is_pressed():
         while not startsensor.is_pressed():
             print("waiting")
             pass
-        # wait until press
         full_lap()
-        
-        # follow_path()
-        # follow_path_backwards()
     ES.emergency_stop()
 except BaseException as error:
     print(error)

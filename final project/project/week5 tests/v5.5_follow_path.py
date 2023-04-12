@@ -200,8 +200,8 @@ def follow_path_carefully():
         leftmotor.set_power(14)
         rightmotor.set_power(14)
     else:
-        leftmotor.set_power(15)
-        rightmotor.set_power(17)
+        leftmotor.set_power(10)
+        rightmotor.set_power(14)
     
 
 def follow_path():
@@ -287,12 +287,11 @@ green = 0
 
 def full_lap():
     """
-    v5.3
+    From v5.3, changed in v5.5
     While there are cubes to deliver, follow the path
     When all cubes are delivered, turn around and drive back to bay
     """
     global yellow
-    
     while not len(delivery_cubes)==0 and not sensor.is_pressed():
         follow_path()
     if sensor.is_pressed(): ES.emergency_stop()
@@ -305,14 +304,6 @@ def full_lap():
     leftmotor.set_power(0)
     rightmotor.set_power(0)
     yellow = False
-    #Ask for more cubes
-
-    while not startsensor.is_pressed():
-        print("waiting'")
-        time.sleep(0.1)
-
-
-
 
 # Main function
 time.sleep(4)

@@ -166,14 +166,17 @@ def follow_path_carefully():
     """
     path_color= get_color.get_mean_color(front_color_sensor)
     if path_color in mapred:
-        leftmotor.set_power(-5)
-        rightmotor.set_power(15)
+        leftmotor.set_power(-14)
+        rightmotor.set_power(20)
     elif path_color in mapblue: 
-        leftmotor.set_power(20)
-        rightmotor.set_power(-10)
+        leftmotor.set_power(23)
+        rightmotor.set_power(-14)
+    elif path_color in mapgreen:
+        leftmotor.set_power(14)
+        rightmotor.set_power(14)
     else:
-        leftmotor.set_power(12)
-        rightmotor.set_power(12)
+        leftmotor.set_power(10)
+        rightmotor.set_power(14)
     
 
 def follow_path():
