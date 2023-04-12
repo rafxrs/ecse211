@@ -457,6 +457,7 @@ def full_lap():
     leftmotor.set_power(0)
     rightmotor.set_power(0)
     yellow = False
+    slidemotor.set_position_relative((-1)*(98.3*5))
     #Ask for more cubes
     play_sound(more)
     # while not startsensor.is_pressed():
@@ -476,8 +477,6 @@ try:
             pass
         # wait until press
         full_lap()
-                #add belt reset
-        
         # follow_path()
         # follow_path_backwards()
     ES.emergency_stop()
