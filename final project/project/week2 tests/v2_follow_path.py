@@ -4,10 +4,6 @@ This uses the new files wwe created instead of redefining the functions inside o
 We now have the get_mean_color function inside of the get_color file in the colors folder
 The emergency stop function is in utils.emergency_stop
 """
-
-
-
-
 from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
 from utils.emergency_stop import ES
 import time

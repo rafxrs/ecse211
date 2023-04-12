@@ -97,12 +97,12 @@ def follow_path_backwards():
         
     if color in mapblue:
         leftmotor.set_power(-20)
-        rightmotor.set_power(65)
+        rightmotor.set_power(45)
 
     elif color in mapred: 
 
         leftmotor.set_power(45)
-        rightmotor.set_power(-15)
+        rightmotor.set_power(-25)
 
     elif color in mapgreen:
 
@@ -233,8 +233,6 @@ def follow_path():
                 path_color= get_color.get_mean_color(front_color_sensor)
                 follow_path_carefully()
 
-
-            
         else:
             leftmotor.set_power(18)
             rightmotor.set_power(20)

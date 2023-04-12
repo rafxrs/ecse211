@@ -2,11 +2,7 @@
 Very first version of the software that analyzes the color sensor values, takes the mean of the 10 last polls
 and drives accordingly 
 This code works and follows the path perfectly fine
-We changed it to a more recent version, test2_follow_path.py 
 """
-
-
-
 
 from utils.brick import BP, TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors, reset_brick
 import time, math
@@ -16,7 +12,6 @@ leftmotor = Motor("D")
 rightmotor = Motor("A")
 color_sensor = EV3ColorSensor(3)
 sensor = TouchSensor(1)
-sleepsensor = TouchSensor(4)
 
 wait_ready_sensors(True)
 print("Done waiting.")
@@ -34,31 +29,23 @@ Dictionary to keep track of mean RGB values of each color
 colors = {
     "black": {"mean": [0, 0, 0]},
     "white": {"mean": [300, 300, 200]},
-    "red": {"mean": [250, 30, 30]},
-    "green": {"mean": [20, 100, 30], "cov": [[100, 0, 0], [0, 100, 0], [0, 0, 100]]},
-    "blue": {"mean": [20, 30, 45], "cov": [[100, 0, 0], [0, 100, 0], [0, 0, 100]]},
-    "yellow": {"mean": [300, 200, 20], "cov": [[100, 0, 0], [0, 100, 0], [0, 0, 100]]},
-    #"orange": {"mean": [250, 60, 40], "cov": [[100, 0, 0], [0, 100, 0], [0, 0, 100]]},
-    "purple": {"mean": [70, 50, 70], "cov": [[100, 0, 0], [0, 100, 0], [0, 0, 100]]},
-    "table_dark_gray": {"mean": [85, 85, 50], "cov": [[100, 0, 0], [0, 100, 0], [0, 0, 100]]},
+    "yellow": {"mean": [300, 200, 20]},
+    "orange": {"mean": [240, 80, 50]},
+    "purple": {"mean": [185, 35, 35]},
     "map_white": {"mean": [300, 260, 170]},
     "map_tape": {"mean": [190, 170, 100]},
-    "map_blue": {"mean": [37,60,60]},
+    "blue": {"mean": [37,60,60]},
     "map_blue_plus_tape": {"mean": [45,50,52]},
-    "map_red": {"mean": [245,38,18]},
-    "map_red_plus_tape": {"mean": [250,50,30]},
-    "map_green": {"mean": [37,100,20]},
+    "red": {"mean": [245,38,18]},
+    "map_red_plus_tape": {"mean": [250,45,30]},
+    "green": {"mean": [37,100,20]},
     "map_green_plus_tape": {"mean": [50,120,30]},
-    #"red_white_boundary": {"mean": [255,100,75]},
-    #"blue_white_boundary": {"mean": [280,255,160]},
-    "pink": {"mean": [255, 192, 203], "cov": [[100, 0, 0], [0, 100, 0], [0, 0, 100]]},
-}
+    }
 
 mapred = ["map_red", "map_red_plus_tape", "red"]
 mapblue = ["map_blue", "map_blue_plus_tape", "blue"]
 mapgreen = ["map_green", "map_green_plus_tape", "green"]
 mapwhite = ["map_white", "white", "map_tape"]
-
 
 # Define the threshold for color distance
 color_threshold = 50
@@ -116,23 +103,6 @@ def mean_color(color_name):
     else:
         return "unknown"
 
-last_30 = deque(maxlen=30)
-
-def get_last_30(mean):
-    last_30.append(mean)
-    #print(len(color_polls))
-    if len(last_30) == 30:
-        last_counts= {}
-        for color in last_30:
-            if color in last_counts:
-                last_counts[color]+=1
-            else:
-                last_counts[color]=1
-        last_color = max(last_counts, key=last_counts.get)
-        return last_color
-    else:
-        return "unknown"
-
 def get_color():
     color = closest_color(tuple(color_sensor.get_rgb()))
     #print(color)
@@ -143,12 +113,6 @@ def get_color():
 def follow_path():
     try:
         path_color= get_color()
-        last = get_last_30(path_color)
-
-        #print("last 30 mean: "+last)
-
-        #path_color = "aha"
-        #print(color_sensor.get_rgb())
         if path_color == "yellow":
             leftmotor.set_power(12)
             rightmotor.set_power(12)
@@ -165,17 +129,11 @@ def follow_path():
     
     except BaseException as error:
         print(error)
-
-
         
 time.sleep(4)
 try:
     while not sensor.is_pressed():
-        if sleepsensor.is_pressed():
-            print("sleep")
-            time.sleep(3)
         follow_path()
-        #print(color_sensor.get_rgb())
     emergency_stop()
 except BaseException as error:
     print(error)

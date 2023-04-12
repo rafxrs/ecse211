@@ -1,14 +1,14 @@
 """
 This file is for any color data related code
-It contains the dictionary of RGB values for each color on the map
 """
 
 colors_dictionary = {
     "black": {"mean": [0, 0, 0]},
     "white": {"mean": [300, 300, 200]},
-    "border": {"mean": [170, 170, 70]},
+    "border": {"mean": [150, 140, 90]},
+    # "yellowside": {"mean": [230, 200, 20]},
     "yellow": {"mean": [330, 310, 30]},
-    "yellowfront": {"mean": [235, 200, 20]},
+    "yellowfront": {"mean": [190, 165, 15]},
     "orange": {"mean": [320, 110, 20]},
     "purple": {"mean": [240, 40, 50]},
     "map_white": {"mean": [300, 260, 170]},

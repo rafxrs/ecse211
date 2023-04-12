@@ -1,9 +1,7 @@
 """
-CODE IN PROGRESS
 v6
 FINAL VERSION
-
-
+Added code to play a sound when we are back a the loading bay to ask for more cubes.
 """
 
 from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
@@ -12,7 +10,6 @@ import time
 from colors import get_color
 from utils.sound import Sound
 
-more = Sound(duration=3.0, volume=100, pitch="E4")
 leftmotor = Motor("D")
 rightmotor = Motor("A")
 pushmotor= Motor("C")
@@ -22,22 +19,16 @@ zone_color_sensor = EV3ColorSensor(2)
 sensor = TouchSensor(1)
 startsensor = TouchSensor(4)
 
-"""
-CONSTANTS
-"""
-
 # Names of the colors
 mapred = ["map_red", "map_red_plus_tape", "red", "redfront"]
 mapblue = ["map_blue", "map_blue_plus_tape", "blue", "bluefront"]
 mapgreen = ["map_green", "map_green_plus_tape", "green"]
 mapwhite = ["map_white", "white", "map_tape"]
-mapyellow = ["yellow", "yellowfront"]
 delivery_cubes = ["red", "orange", "yellow", "green", "blue", "purple"]
 delivery_zones = []
 
 #Global variable to keep track of what turn we were taking last
 last = "white"
-last_backwards = "white"
 yellow = False
 
 #Global variable for the delivery color
@@ -53,34 +44,84 @@ cube_positions = {
     "orange": 98.3,
     "yellow": 196.60,
     "green": 294.9,
-    "blue": 393.2,
+    "blue": 390,
     "purple": 491.5
 }
 
-"""
-INITIALIZE MOTORS
-"""
-
+# Initialize motors
 slidemotor.reset_encoder()                      # Reset encoder to 0 value
 slidemotor.set_limits(POWER_LIMIT, SPEED_LIMIT) # Set the power and speed limits
 slidemotor.set_power(0)
-
 pushmotor.reset_encoder()                      # Reset encoder to 0 value
 pushmotor.set_limits(POWER_LIMIT, SPEED_LIMIT) # Set the power and speed limits
 pushmotor.set_power(0)
-
 leftmotor.reset_encoder() 
 rightmotor.reset_encoder() 
-
 
 # Initialize sensors
 wait_ready_sensors(True)
 print("Done waiting.")
 
+more = Sound(duration=3.0, volume=100, pitch="E4")
 def play_sound(sound):
+    """
+    New in v6 Final version
+    """
     #Play a single note.
     sound.play()
     sound.wait_done()
+
+def turn_around():
+    """
+    v5.1
+    Function to perform a 180 turn when we finish the track
+    """
+    t = 0
+    leftmotor.set_power(-35)
+    rightmotor.set_power(40)
+    while t<1.7:
+        time.sleep(0.1)
+        t+=0.1
+
+def follow_path_backwards():
+    """
+    v5.2
+    Function to follow the path on the way back to the loading bay
+    """
+    global green
+    global yellow
+
+    if len(delivery_cubes)==0:
+            delivery_cubes.append("red")
+            delivery_cubes.append("orange")
+            delivery_cubes.append("yellow")
+            delivery_cubes.append("green")
+            delivery_cubes.append("blue")
+            delivery_cubes.append("purple")
+
+
+    color = get_color.get_mean_color(front_color_sensor)
+    if green >= 6 and color == "yellow":
+        yellow = True
+        
+    elif color in mapblue:
+        leftmotor.set_power(-20)
+        rightmotor.set_power(45)
+
+    elif color in mapred: 
+        leftmotor.set_power(45)
+        rightmotor.set_power(-25)
+
+    elif color in mapgreen:
+        green+=1
+        print(green)
+        while color in mapgreen:
+            color= get_color.get_mean_color(front_color_sensor)
+            follow_path_carefully()
+
+    else:
+        leftmotor.set_power(26)
+        rightmotor.set_power(24)
 
 def adjust():
     """
@@ -113,93 +154,6 @@ def adjust():
             time.sleep(0.1)
             t+=0.1
 
-    elif last_backwards=="red":
-        path_color = get_color.get_mean_front_color(front_color_sensor)
-        while path_color in mapgreen:
-            path_color = get_color.get_mean_front_color(front_color_sensor)
-            leftmotor.set_power(-15)
-            rightmotor.set_power(-15)
-        
-        t=0
-        leftmotor.set_power(-15)
-        rightmotor.set_power(-15)
-        while t<0.5:
-            time.sleep(0.1)
-            t+=0.1
-
-        last_backwards = "white"
-        t=0
-        leftmotor.set_power(20)
-        rightmotor.set_power(-20)
-        while t<0.7:
-            time.sleep(0.1)
-            t+=0.1
-
-def turn_around():
-    """
-    v5.1
-    Function to perform a 180 turn when we finish the track
-    """
-    t = 0
-    leftmotor.set_power(-35)
-    rightmotor.set_power(40)
-    while t<1.8:
-        time.sleep(0.1)
-        t+=0.1
-   
-
-
-def follow_path_backwards():
-    """
-    v5.2
-    Function to follow the path on the way back to the loading bay
-    """
-    global last_backwards
-    global last
-    global green
-    global yellow
-
-    if len(delivery_cubes)==0:
-            delivery_cubes.append("red")
-            delivery_cubes.append("orange")
-            delivery_cubes.append("yellow")
-            delivery_cubes.append("green")
-            delivery_cubes.append("blue")
-            delivery_cubes.append("purple")
-
-
-    color = get_color.get_mean_color(front_color_sensor)
-    if green >= 6 and color in mapyellow:
-        yellow = True
-
-        
-        
-    elif color in mapblue:
-        last_backwards="blue"
-        leftmotor.set_power(-20)
-        rightmotor.set_power(45)
-
-    elif color in mapred: 
-        last_backwards="red"
-        leftmotor.set_power(45)
-        rightmotor.set_power(-25)
-
-    elif color in mapgreen:
-        last = "white"
-        if last_backwards == "red":
-            green-=1
-        adjust()
-        green+=1
-        print(green)
-        while color in mapgreen:
-            color= get_color.get_mean_color(front_color_sensor)
-            follow_path_carefully()
-
-    else:
-        leftmotor.set_power(26)
-        rightmotor.set_power(24)
-
-
 
 def move_to_cube_position(color_name):
     """
@@ -223,7 +177,7 @@ def push():
     Imported from v4
     Function to activate the piston
     """
-    pushmotor.set_position_relative(360)
+    pushmotor.set_position_relative(362)
     time.sleep(1)
 
 def drop():
@@ -244,12 +198,7 @@ def drop():
     
 
 def follow_path_carefully():
-    """
-    To follow the path only with the front sensor:
-    We need this function when the back sensor reads the zone color
-    If we only use follow_path(), when the back sensor sees green, it will keep turning right and left and read the delivery color
-    We need to get to the next green line, so if we need to ignore the back sensor and keep driving we can use this function
-    """
+    
     path_color= get_color.get_mean_color(front_color_sensor)
     if path_color in mapred:
         leftmotor.set_power(-14)
@@ -261,8 +210,8 @@ def follow_path_carefully():
         leftmotor.set_power(14)
         rightmotor.set_power(14)
     else:
-        leftmotor.set_power(15)
-        rightmotor.set_power(17)
+        leftmotor.set_power(10)
+        rightmotor.set_power(14)
     
 
 def follow_path():
@@ -309,7 +258,7 @@ def follow_path():
                 while t<0.2:
                     time.sleep(0.01)
                     follow_path_carefully()
-                    t+=0.01
+                    t+=0.02
                 leftmotor.set_power(0)
                 rightmotor.set_power(0)
                 time.sleep(1)
@@ -325,9 +274,9 @@ def follow_path():
                     follow_path_carefully()
 
                 t = 0
-                leftmotor.set_power(13)
-                rightmotor.set_power(13)
-                while t<0.12:
+                leftmotor.set_power(10)
+                rightmotor.set_power(10)
+                while t<0.02:
                     time.sleep(0.01)
                     t+=0.01
                 leftmotor.set_power(0)

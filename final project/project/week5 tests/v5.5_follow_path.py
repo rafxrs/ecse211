@@ -1,12 +1,8 @@
 """
-CODE IN PROGRESS
 v5.5
-
-LATEST VERSION FROM 04.03
-
-Changes from v5.4:
-- 
-
+Added a start sensor and a way to do mutliple runs:
+- startsensor tells the robot to start delivering (calling the full lap function)
+- When a lap is over, we add all 6 delivery colors back to the delivery cubes list
 """
 
 from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
@@ -38,7 +34,6 @@ delivery_zones = []
 
 #Global variable to keep track of what turn we were taking last
 last = "white"
-last_backwards = "white"
 yellow = False
 
 #Global variable for the delivery color
@@ -79,13 +74,71 @@ wait_ready_sensors(True)
 print("Done waiting.")
 
 
+
+
+def turn_around():
+    """
+    v5.1
+    Function to perform a 180 turn when we finish the track
+    """
+    t = 0
+    leftmotor.set_power(-35)
+    rightmotor.set_power(40)
+    while t<1.8:
+        time.sleep(0.1)
+        t+=0.1
+
+
+def follow_path_backwards():
+    """
+    v5.2
+    Function to follow the path on the way back to the loading bay
+    """
+    global green
+    global yellow
+
+    # We added this in order to be able to do multiple runs
+    if len(delivery_cubes)==0:
+            delivery_cubes.append("red")
+            delivery_cubes.append("orange")
+            delivery_cubes.append("yellow")
+            delivery_cubes.append("green")
+            delivery_cubes.append("blue")
+            delivery_cubes.append("purple")
+
+
+    color = get_color.get_mean_color(front_color_sensor)
+    if green >= 6 and color == "yellow":
+        yellow = True
+        
+        
+    elif color in mapblue:
+
+        leftmotor.set_power(-20)
+        rightmotor.set_power(45)
+
+    elif color in mapred: 
+
+        leftmotor.set_power(45)
+        rightmotor.set_power(-25)
+
+    elif color in mapgreen:
+        green+=1
+        print(green)
+        while color in mapgreen:
+            color= get_color.get_mean_color(front_color_sensor)
+            follow_path_carefully()
+
+    else:
+        leftmotor.set_power(26)
+        rightmotor.set_power(24)
+
 def adjust():
     """
     from v5.4
     Adjust the robot when we reach the green line depending on what turn we were taking previously
     """
     global last
-    global last_backwards
 
     if last=="red":
         # Adjust if we saw red last
@@ -109,100 +162,6 @@ def adjust():
         while t<0.8:
             time.sleep(0.1)
             t+=0.1
-
-    elif last_backwards=="red":
-        path_color = get_color.get_mean_front_color(front_color_sensor)
-        while path_color in mapgreen:
-            path_color = get_color.get_mean_front_color(front_color_sensor)
-            leftmotor.set_power(-15)
-            rightmotor.set_power(-15)
-        
-        t=0
-        leftmotor.set_power(-15)
-        rightmotor.set_power(-15)
-        while t<0.5:
-            time.sleep(0.1)
-            t+=0.1
-
-        last_backwards = "white"
-        t=0
-        leftmotor.set_power(20)
-        rightmotor.set_power(-20)
-        while t<0.7:
-            time.sleep(0.1)
-            t+=0.1
-
-def turn_around():
-    """
-    v5.1
-    Function to perform a 180 turn when we finish the track
-    """
-    t = 0
-    leftmotor.set_power(-35)
-    rightmotor.set_power(40)
-    while t<1.8:
-        time.sleep(0.1)
-        t+=0.1
-
-
-def follow_path_backwards():
-    """
-    v5.2
-    Function to follow the path on the way back to the loading bay
-    """
-    global last_backwards
-    global last
-    global green
-    global yellow
-
-    if len(delivery_cubes)==0:
-            delivery_cubes.append("red")
-            delivery_cubes.append("orange")
-            delivery_cubes.append("yellow")
-            delivery_cubes.append("green")
-            delivery_cubes.append("blue")
-            delivery_cubes.append("purple")
-
-
-    color = get_color.get_mean_color(front_color_sensor)
-    if green >= 6 and color == "yellow":
-        leftmotor.set_power(0)
-        rightmotor.set_power(0)
-        time.sleep(1)
-        color = get_color.get_mean_color(front_color_sensor)
-        if color == "yellow":
-            yellow = True
-            
-            green = 0
-        else:
-            pass
-        
-        
-    elif color in mapblue:
-        last_backwards="blue"
-        leftmotor.set_power(-20)
-        rightmotor.set_power(45)
-
-    elif color in mapred: 
-        last_backwards="red"
-        leftmotor.set_power(45)
-        rightmotor.set_power(-15)
-
-    elif color in mapgreen:
-        last = "white"
-        if last_backwards == "red":
-            green-=1
-        adjust()
-        green+=1
-        print(green)
-        while color in mapgreen:
-            color= get_color.get_mean_color(front_color_sensor)
-            follow_path_carefully()
-
-    else:
-        leftmotor.set_power(26)
-        rightmotor.set_power(24)
-
 
 
 def move_to_cube_position(color_name):
@@ -240,7 +199,6 @@ def drop():
     global delivery_cubes
     move_to_cube_position(delivery_color)
     pushmotor.set_limits(140, 1500) # Set the power and speed limits
-    # Push twice to make sure the cube falls off
     push()
     move_to_base(delivery_color)
     delivery_cubes.remove(delivery_color)
@@ -274,20 +232,16 @@ def follow_path():
         # time.sleep(0.01)
         global delivery_color
         global last
-
-        
         
         path_color= get_color.get_mean_color(front_color_sensor)
         # zone_color = get_color.get_mean_zone_color(zone_color_sensor)
         
         if path_color in mapred:
-        
             last = "red"
             leftmotor.set_power(-40)
             rightmotor.set_power(20)
 
         elif path_color in mapblue: 
-        
             last = "blue"
             leftmotor.set_power(45)
             rightmotor.set_power(-15)
@@ -316,9 +270,6 @@ def follow_path():
                 time.sleep(1)
                 zone_color = get_color.get_mean_zone_color(zone_color_sensor)
                 delivery_color = zone_color
-                
-
-                
 
                 while zone_color in delivery_cubes:
                     zone_color = get_color.get_mean_zone_color(zone_color_sensor)
@@ -342,12 +293,6 @@ def follow_path():
                     while path_color in mapgreen:
                         path_color= get_color.get_mean_color(front_color_sensor)
                         follow_path_carefully()
-                
-        
-                #adjust_after_green()
-                    
-
-                #last= "red"
             
         else:
             # last = "white"

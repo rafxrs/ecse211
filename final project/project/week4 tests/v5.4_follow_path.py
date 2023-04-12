@@ -32,7 +32,6 @@ delivery_zones = []
 
 #Global variable to keep track of what turn we were taking last
 last = "white"
-last_backwards = "white"
 
 #Global variable for the delivery color
 delivery_color = ""
@@ -103,28 +102,6 @@ def adjust():
             time.sleep(0.1)
             t+=0.1
 
-    elif last_backwards=="red":
-        path_color = get_color.get_mean_front_color(front_color_sensor)
-        while path_color in mapgreen:
-            path_color = get_color.get_mean_front_color(front_color_sensor)
-            leftmotor.set_power(-15)
-            rightmotor.set_power(-15)
-        
-        t=0
-        leftmotor.set_power(-15)
-        rightmotor.set_power(-15)
-        while t<0.7:
-            time.sleep(0.1)
-            t+=0.1
-
-        last_backwards = "white"
-        t=0
-        leftmotor.set_power(20)
-        rightmotor.set_power(-10)
-        while t<0.7:
-            time.sleep(0.1)
-            t+=0.1
-
 def turn_around():
     """
     v5.1
@@ -142,7 +119,6 @@ def follow_path_backwards():
     v5.2
     Function to follow the path on the way back to the loading bay
     """
-    global last_backwards
     global green
     color = get_color.get_mean_color(front_color_sensor)
 
@@ -150,14 +126,14 @@ def follow_path_backwards():
         ES.emergency_stop()
         
     if color in mapblue:
-        last_backwards="blue"
+
         leftmotor.set_power(-20)
-        rightmotor.set_power(65)
+        rightmotor.set_power(45)
 
     elif color in mapred: 
-        last_backwards="red"
-        leftmotor.set_power(40)
-        rightmotor.set_power(-10)
+
+        leftmotor.set_power(45)
+        rightmotor.set_power(-25)
 
     elif color in mapgreen:
         # adjust()
@@ -208,8 +184,7 @@ def drop():
     """
     global delivery_cubes
     move_to_cube_position(delivery_color)
-    pushmotor.set_limits(80, 500) # Set the power and speed limits
-    # Push twice to make sure the cube falls off
+    pushmotor.set_limits(140, 1500) # Set the power and speed limits
     push()
     move_to_base(delivery_color)
     delivery_cubes.remove(delivery_color)
