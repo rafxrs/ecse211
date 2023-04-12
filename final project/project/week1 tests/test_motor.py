@@ -1,15 +1,13 @@
+"""
+Simple file to test two motors simultaneoulsy
+"""
 from utils.brick import BP, TouchSensor, Motor, wait_ready_sensors, reset_brick
-import time, math
-
+import time
 actionsensor = TouchSensor(4)
 stopsensor = TouchSensor(1)
 motor = Motor("B")
-
-#This is a testing file to test a single motor
-
 POWER_LIMIT = 20       # Power limit (percentage)
 SPEED_LIMIT = 360      # Speed limit in degree per second
-
 wait_ready_sensors(True)
 print("Done waiting.")
 
@@ -26,12 +24,9 @@ try:
     motor.reset_encoder()                      # Reset encoder to 0 value
     motor.set_limits(POWER_LIMIT, SPEED_LIMIT) # Set the power and speed limits
     motor.set_power(0)
-
-    #Test by going down 90 degrees and then up 90 degrees
     while not stopsensor.is_pressed():
         if actionsensor.is_pressed():
             motor.set_power(10)
-
     emergency_stop()
 except BaseException as error:
     print(error)

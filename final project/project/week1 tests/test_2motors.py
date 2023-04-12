@@ -2,7 +2,6 @@
 A simple test program that tests the two wheel motors at the same time
 We can change the set power values anytime to test to turn left or right, etc...
 """
-
 from utils.brick import BP, TouchSensor, Motor, wait_ready_sensors
 import time
 from utils.emergency_stop import ES
