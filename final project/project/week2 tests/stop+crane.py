@@ -4,7 +4,6 @@ from collections import deque
 from colors import color_info
 import time, math
 
-
 leftmotor = Motor("D")
 rightmotor = Motor("A")
 cranemotor = Motor("B")
@@ -27,7 +26,6 @@ mapblue = ["map_blue", "map_blue_plus_tape", "blue"]
 mapgreen = ["map_green", "map_green_plus_tape", "green"]
 mapwhite = ["map_white", "white", "map_tape"]
 delivery_cubes = ["red", "orange", "yellow", "green", "blue", "purple"]
-
 
 # Define the threshold for color distance
 static_color_threshold = 50
@@ -173,13 +171,12 @@ def follow_path():
         elif (path in mapgreen):
             leftmotor.set_power(0)
             rightmotor.set_power(0)
-            #adjust_robot()
             
-            #cranemotor.set_position_relative(90)
+            cranemotor.set_position_relative(90)
             for i in range (5):
                 print(mobile_color_sensor.get_rgb())
                 time.sleep(1)
-            #cranemotor.set_position_relative(-90)
+            cranemotor.set_position_relative(-90)
             
             print("color: "+ last)
             delivery_colors.append(last)

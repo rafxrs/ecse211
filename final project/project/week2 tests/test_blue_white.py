@@ -129,13 +129,11 @@ def get_color():
 def follow_path():
     try:
         path_color= get_color()
-        last = get_last_30(path_color)
 
         if path_color == "blue" or path_color == "map_blue" or path_color == "map_blue_plus_tape": 
             leftmotor.set_power(8)
             rightmotor.set_power(30)
         else:
-            #print("No movement")
             leftmotor.set_power(30)
             rightmotor.set_power(8)
     

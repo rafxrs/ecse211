@@ -1,6 +1,4 @@
-"""
-Simple file to test two motors simultaneoulsy
-"""
+# Simple file to test a single motor
 from utils.brick import BP, TouchSensor, Motor, wait_ready_sensors, reset_brick
 import time
 actionsensor = TouchSensor(4)

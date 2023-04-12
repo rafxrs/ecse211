@@ -47,12 +47,7 @@ def move_to_base(current_color):
 
 #Main function
 try:
-    #while not stopsensor.is_pressed():
-        #Comment out one of those lines depending on what you want to test
-
-        # slidemotor.set_position_relative(394)
-        # time.sleep(3)
-        # slidemotor.set_position_relative(-394)
+    # Comment out as needed for testing
 
     # move_to_cube_position("red")
     # move_to_base("red")

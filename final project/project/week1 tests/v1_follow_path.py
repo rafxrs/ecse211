@@ -3,16 +3,13 @@ Very first version of the software that analyzes the color sensor values, takes 
 and drives accordingly 
 This code works and follows the path perfectly fine
 """
-
 from utils.brick import BP, TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors, reset_brick
 import time, math
 from collections import deque
-
 leftmotor = Motor("D")
 rightmotor = Motor("A")
 color_sensor = EV3ColorSensor(3)
 sensor = TouchSensor(1)
-
 wait_ready_sensors(True)
 print("Done waiting.")
 
@@ -49,7 +46,6 @@ mapwhite = ["map_white", "white", "map_tape"]
 
 # Define the threshold for color distance
 color_threshold = 50
-
 # Define the function to normalize RGB values
 def normalize_rgb(r, g, b):
     denominator = math.sqrt(r**2+g**2+b**2)
@@ -86,9 +82,7 @@ def closest_color(rgb_values):
         return None
 
 color_polls = deque(maxlen=10)
-
 def mean_color(color_name):
-    
     color_polls.append(color_name)
     #print(len(color_polls))
     if len(color_polls) == 10:
@@ -116,17 +110,15 @@ def follow_path():
         if path_color == "yellow":
             leftmotor.set_power(12)
             rightmotor.set_power(12)
-        elif path_color == "red" or path_color == "map_red" or path_color == "map_red_plus_tape":
+        elif path_color in mapred:
             leftmotor.set_power(8)
             rightmotor.set_power(30)
-        elif path_color == "blue" or path_color == "map_blue" or path_color == "map_blue_plus_tape": 
+        elif path_color in mapblue: 
             leftmotor.set_power(30)
             rightmotor.set_power(8)
         else:
-            #print("No movement")
             leftmotor.set_power(12)
             rightmotor.set_power(12)
-    
     except BaseException as error:
         print(error)
         

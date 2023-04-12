@@ -8,7 +8,6 @@ from utils.brick import TouchSensor, EV3ColorSensor, Motor, wait_ready_sensors
 from utils.emergency_stop import ES
 import time
 from colors import get_color
-
 leftmotor = Motor("D")
 rightmotor = Motor("A")
 color_sensor = EV3ColorSensor(3)
@@ -18,9 +17,6 @@ mapred = ["map_red", "map_red_plus_tape", "red"]
 mapblue = ["map_blue", "map_blue_plus_tape", "blue"]
 mapgreen = ["map_green", "map_green_plus_tape", "green"]
 mapwhite = ["map_white", "white", "map_tape"]
-delivery_zones = ["red_zone", "orange_zone", "green_zone", "blue_zone", "purple_zone"]
-delivery_cubes = ["red", "orange", "yellow", "green", "blue", "purple"]
-
 wait_ready_sensors(True)
 print("Done waiting.")
 
@@ -36,10 +32,8 @@ def follow_path():
         else:
             leftmotor.set_power(18)
             rightmotor.set_power(18)
-    
     except BaseException as error:
         print(error)
-
 
 # Main function
 time.sleep(4)
